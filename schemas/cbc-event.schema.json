@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/<YOUR_GITHUB_USER>/cbc-event/schemas/cbc-event.schema.json",
+  "title": "cbc-event/v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "timestamp",
+    "source",
+    "level",
+    "action",
+    "detail",
+    "evidence_hash",
+    "prev_hash",
+    "event_hash",
+    "seq"
+  ],
+  "properties": {
+    "schema": {"const": "cbc-event/v1"},
+    "event_id": {"type": "string", "format": "uuid"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "source": {
+      "type": "object",
+      "required": ["kind", "name", "version", "instance"],
+      "properties": {
+        "kind": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "instance": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "level": {"enum": ["INFO", "WARN", "CRITICAL"]},
+    "action": {"type": "string", "minLength": 1},
+    "detail": {"type": "object"},
+    "evidence_hash": {"type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$"},
+    "prev_hash": {"type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$"},
+    "event_hash": {"type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$"},
+    "seq": {"type": "integer", "minimum": 1},
+    "trace_id": {"type": "string"},
+    "host": {"type": "string"}
+  },
+  "additionalProperties": true
+}
