@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from .canonical import canonical_bytes
-from .schema import validate_event
+from .schema import validate_event as _validate_schema
 
 GENESIS = "sha256:" + ("0" * 64)
 HEAD = "head.json"
@@ -32,6 +32,37 @@ def compute_event_hash(prev_hash: str, event: dict[str, Any]) -> str:
     """Hash prev_hash and the canonical event without event_hash."""
     body = {key: value for key, value in event.items() if key != "event_hash"}
     return _sha256(prev_hash.encode("utf-8") + b"\n" + canonical_bytes(body))
+
+
+def validate_event(
+    event: dict[str, Any],
+    *,
+    expected_seq: int | None = None,
+    prev_hash: str | None = None,
+) -> dict[str, Any]:
+    """Validate one event without rejecting unknown fields.
+
+    Missing fields and type errors go to ``problems``. Unknown fields become
+    ``warnings``. Chain continuity and event hash mismatches go to ``critical``
+    while the already-read event remains available to the caller.
+    """
+    errors, warnings = _validate_schema(event)
+    problems = list(errors)
+    critical: list[str] = []
+    if not errors:
+        if expected_seq is not None and event["seq"] != expected_seq:
+            critical.append(f"sequence gap: expected {expected_seq}, got {event['seq']}")
+        if prev_hash is not None and event["prev_hash"] != prev_hash:
+            critical.append("chain break: prev_hash does not match")
+        if compute_event_hash(event["prev_hash"], event) != event["event_hash"]:
+            critical.append("event_hash mismatch")
+    return {
+        "ok": not problems and not critical,
+        "event": event,
+        "problems": problems,
+        "warnings": warnings,
+        "critical": critical,
+    }
 
 
 @contextmanager
@@ -114,9 +145,9 @@ class EventStore:
                 "prev_hash": prev_hash,
                 "seq": seq,
             }
-            errors, _warnings = validate_event({**event, "event_hash": GENESIS})
-            if errors:
-                raise ValueError("invalid cbc-event: " + "; ".join(errors))
+            report = validate_event({**event, "event_hash": GENESIS})
+            if report["problems"]:
+                raise ValueError("invalid cbc-event: " + "; ".join(report["problems"]))
             event["event_hash"] = compute_event_hash(prev_hash, event)
             day = event["timestamp"][:10]
             target = self.event_dir / f"{day}.jsonl"
@@ -157,17 +188,12 @@ def read_events(path: Path | str) -> tuple[list[dict[str, Any]], list[str], list
             except ValueError as exc:
                 problems.append(f"{file.name}:{lineno}: invalid json: {exc}")
                 continue
-            errors, event_warnings = validate_event(event)
-            warnings.extend(f"{file.name}:{lineno}: {item}" for item in event_warnings)
-            if errors:
-                problems.extend(f"{file.name}:{lineno}: {item}" for item in errors)
+            report = validate_event(event, expected_seq=expected_seq, prev_hash=expected_prev)
+            warnings.extend(f"{file.name}:{lineno}: {item}" for item in report["warnings"])
+            problems.extend(f"{file.name}:{lineno}: {item}" for item in report["problems"])
+            if report["problems"]:
                 continue
-            if event["seq"] != expected_seq:
-                problems.append(f"{file.name}:{lineno}: sequence gap: expected {expected_seq}, got {event['seq']}")
-            if event["prev_hash"] != expected_prev:
-                problems.append(f"{file.name}:{lineno}: chain break: prev_hash does not match")
-            if compute_event_hash(event["prev_hash"], event) != event["event_hash"]:
-                problems.append(f"{file.name}:{lineno}: event_hash mismatch")
+            problems.extend(f"{file.name}:{lineno}: CRITICAL: {item}" for item in report["critical"])
             expected_seq = event["seq"] + 1
             expected_prev = event["event_hash"]
             events.append(event)

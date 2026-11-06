@@ -21,6 +21,9 @@ class CanonicalTests(unittest.TestCase):
         self.assertEqual(canonical_json(-0.0), "0")
         self.assertEqual(canonical_json(1.5), "1.5")
 
+    def test_boolean_null_and_list(self) -> None:
+        self.assertEqual(canonical_json([False, None, "x"]), '[false,null,"x"]')
+
     def test_jcs_number_boundaries(self) -> None:
         self.assertEqual(canonical_json(1e20), "100000000000000000000")
         self.assertEqual(canonical_json(1e21), "1e+21")
@@ -45,13 +48,13 @@ class CanonicalTests(unittest.TestCase):
             "seq": 1,
             "new_optional_field": "ok",
         }
-        errors, warnings = validate_event(event)
-        self.assertEqual(errors, [])
-        self.assertTrue(any("new_optional_field" in item for item in warnings))
+        report = validate_event(event)
+        self.assertEqual(report["problems"], [])
+        self.assertTrue(any("new_optional_field" in item for item in report["warnings"]))
 
     def test_missing_core_field_is_error(self) -> None:
-        errors, _warnings = validate_event({"level": "INFO"})
-        self.assertTrue(any("missing field: timestamp" in item for item in errors))
+        report = validate_event({"level": "INFO"})
+        self.assertTrue(any("missing field: timestamp" in item for item in report["problems"]))
 
 
 if __name__ == "__main__":

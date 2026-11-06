@@ -6,8 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .canonical import CanonicalizationError, canonical_bytes, canonical_json
-from .schema import validate_event
-from .store import EventStore, GENESIS, compute_event_hash, read_events
+from .store import EventStore, GENESIS, compute_event_hash, read_events, validate_event
 
 __all__ = [
     "Client",
@@ -34,7 +33,7 @@ class Client:
     ) -> None:
         if enabled is None:
             enabled = os.environ.get("CBC_REPORT_ENABLED", "false").lower() in {"1", "true", "yes"}
-        directory = event_dir or os.environ.get("CBC_EVENT_DIR") or str(Path.home() / ".cb" / "events")
+        directory = Path(event_dir or os.environ.get("CBC_EVENT_DIR") or str(Path.home() / ".cb" / "events")).expanduser()
         default_source = {
             "kind": "unknown",
             "name": "unknown",

@@ -6,6 +6,16 @@ The shared event protocol for the CB ecosystem.
 or CBC, and it does not open network ports. Producers append JSONL files; CBC
 reads them.
 
+## Version freeze
+
+**`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**
+Within `0.1.x` only optional fields may be appended. Existing required fields
+must not be deleted, renamed, reordered, or have their type or meaning changed.
+
+Once CBS 1.6.4 and CBP 0.1.0 begin consuming `cbc-event`, the `0.1.0` schema and
+canonicalization rules are frozen. Any breaking change must become `0.2.0` with
+a migration note.
+
 ## Event
 
 ```json
@@ -29,31 +39,44 @@ reads them.
 }
 ```
 
-## Usage
+## Minimal integration
+
+Three lines:
 
 ```python
-from cbc_event import emit, Client
-
-# Default: disabled, no directory, no thread, no socket.
-client = Client(event_dir=os.path.expanduser("~/.cb/events"), enabled=False)
-
-# Enable explicitly:
-client = Client(event_dir=os.path.expanduser("~/.cb/events"), enabled=True,
-                 source={"kind": "CBP", "name": "cbp-action",
-                         "version": "0.1.0", "instance": "ci-01"})
-client.emit("WARN", "coverage.fail", {"measurement": 79.4})
+from cbc_event import Client
+client = Client(enabled=True, source={"kind": "CBR", "name": "cbr", "version": "0.1.0", "instance": "local"})
+client.emit("WARN", "hallucinated_package", {"package": "example"})
 ```
 
-Reading:
+Default is disabled:
+
+```python
+from cbc_event import Client
+client = Client()  # no directory, no thread, no socket
+```
+
+## Reading
 
 ```python
 from cbc_event import read_events
 events, warnings, problems = read_events(path)
 ```
 
-- unknown fields: kept, reported as `WARN`, never fatal;
-- chain gaps: reported in `problems`, never fatal to the reader;
-- append-only: this package never rewrites or deletes event lines.
+Reader behavior:
+
+- missing required fields -> `problems`;
+- unknown fields -> `warnings`, event is retained;
+- chain break or hash mismatch -> `problems`/`CRITICAL`, already-read events are
+  retained, nothing is silently repaired.
+
+`validate_event()` is exported for consumers that do not use the emit client:
+
+```python
+from cbc_event import validate_event
+report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
+report["problems"], report["warnings"], report["critical"]
+```
 
 ## Compatibility
 
@@ -64,6 +87,9 @@ Consumers must ignore unknown fields and emit a warning.
 
 ```bash
 python -m unittest discover -s tests -v
+python -m coverage run --branch --source=cbc_event -m unittest discover -s tests
+python -m coverage report --fail-under=90
 ```
 
-No runtime third-party dependencies.
+No runtime third-party dependencies. `pytest` and `coverage` are optional test
+dependencies.
