@@ -1,0 +1,150 @@
+"""CBC-E2E-F01..F08: F6 NOT_UPLOADED and body rendering."""
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+import tempfile
+import unittest
+from pathlib import Path
+
+from cbc_viewer.body import render_appendix, render_not_uploaded_entry
+from cbc_viewer.verify import verify_release
+from tests.e2e.fixtures import SDIST, WHEEL, make_release
+
+CBS_TOOL = Path(__file__).resolve().parents[3] / "public-release" / "tools" / "release_body_v17.py"
+
+
+class _FakeTransport:
+    def __init__(self, release: dict) -> None:
+        self.release = release
+
+    def get_release(self, owner: str, repo: str, tag: str) -> dict:
+        return self.release
+
+    def get_tag_commit(self, owner: str, repo: str, tag: str) -> str | None:
+        return None
+
+
+def _digest(path: Path) -> str:
+    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+class F6Tests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmp = tempfile.TemporaryDirectory()
+
+    def tearDown(self) -> None:
+        self.tmp.cleanup()
+
+    def test_f01_declared_attached_not_uploaded(self) -> None:
+        paths = make_release(Path(self.tmp.name), declared=True)
+        result = verify_release(paths["release"], declared_attached=True)
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.report["gate_status"], "NOT_UPLOADED")
+        self.assertEqual(result.report["cbc_chain_status"], "PASS")
+        self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+        self.assertTrue(result.report["skip"]["not_counted_in_skip_ratio"])
+        entry = render_not_uploaded_entry(result.report)
+        self.assertEqual(entry.split(" (chain FAIL")[0], "cbc: declared as attached but not uploaded")
+        appendix = render_appendix(result.report)
+        self.assertIn("declared as attached but not uploaded", appendix)
+        self.assertIn("NOT a release PASS", appendix)
+
+    def test_f02_not_declared_not_uploaded(self) -> None:
+        paths = make_release(Path(self.tmp.name), declared=False)
+        result = verify_release(paths["release"], declared_attached=False)
+        entry = render_not_uploaded_entry(result.report)
+        self.assertEqual(entry, "cbc: NOT_UPLOADED (not attached)")
+        self.assertNotIn("declared as attached", entry)
+
+    def test_f03_expect_uploaded_without_remote_is_2(self) -> None:
+        paths = make_release(Path(self.tmp.name))
+        result = verify_release(paths["release"], expect_uploaded=True)
+        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(result.report["gate_status"], "PRECONDITION_FAIL")
+        self.assertEqual(result.report["cbc_chain_status"], "PASS")
+        self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+
+    def test_f04_remote_digest_unavailable_is_not_pass(self) -> None:
+        paths = make_release(Path(self.tmp.name), uploaded=True)
+        release = {
+            "body": paths["body"].read_text(encoding="utf-8"),
+            "assets": [{"name": WHEEL}, {"name": SDIST}],
+        }
+        result = verify_release(paths["release"], remote="owner/repo", transport=_FakeTransport(release))
+        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+        self.assertIsNone(result.report["broken_link"])
+        expect = verify_release(paths["release"], expect_uploaded=True,
+                                remote="owner/repo", transport=_FakeTransport(release))
+        self.assertEqual(expect.exit_code, 2)
+        self.assertEqual(expect.report["gate_status"], "PRECONDITION_FAIL")
+
+    def test_f05_cbs_body_generator_needs_no_change(self) -> None:
+        if not CBS_TOOL.is_file():
+            self.skipTest("CBS read-only checkout is not available")
+        spec = importlib.util.spec_from_file_location("release_body_v17", CBS_TOOL)
+        assert spec is not None and spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        paths = make_release(Path(self.tmp.name), declared=True)
+        report = {
+            "version": "v0.1.0", "gate_status": "NOT_UPLOADED",
+            "applicable_gate_count": 4, "skip_count": 0, "skip_ratio": 0.0,
+            "blocking_skip": False, "gates": [{"name": "encoding", "status": "PASS"}],
+            "not_uploaded": [render_not_uploaded_entry(verify_release(paths["release"], declared_attached=True).report)],
+        }
+        text = module.build(report, paths["wheel"])
+        self.assertIn("## NOT_UPLOADED", text)
+        self.assertIn("- cbc: declared as attached but not uploaded", text)
+
+    def test_f06_not_uploaded_not_in_skip_denominator(self) -> None:
+        paths = make_release(Path(self.tmp.name))
+        result = verify_release(paths["release"])
+        skip = result.report["skip"]
+        self.assertEqual(skip["cbe_skip_ratio"], 0.0)
+        self.assertEqual(skip["cbp_skip_ratio"], 0.0)
+        self.assertEqual(skip["effective_skip_ratio"], 0.0)
+        self.assertTrue(skip["not_counted_in_skip_ratio"])
+        self.assertNotIn("applicable_count", result.report)
+
+    def test_f07_broken_chain_declared(self) -> None:
+        paths = make_release(Path(self.tmp.name), declared=True)
+        paths["wheel"].write_bytes(b"tampered")
+        result = verify_release(paths["release"], declared_attached=True)
+        self.assertEqual(result.exit_code, 3)
+        self.assertEqual(result.report["gate_status"], "FAIL")
+        self.assertEqual(result.report["cbc_chain_status"], "FAIL")
+        self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+        self.assertEqual(result.report["upload_blocked_reason"], "chain_broken")
+        self.assertEqual(result.report["broken_link"]["reason"], "hash_mismatch")
+        entry = render_not_uploaded_entry(result.report)
+        self.assertIn("declared as attached but not uploaded", entry)
+        appendix = render_appendix(result.report)
+        self.assertIn("## CBC chain failure", appendix)
+        self.assertNotIn("- cbc_chain_status: **PASS**", appendix)
+        self.assertIn("CBS main package is not blocked", appendix)
+
+    def test_f08_broken_chain_not_declared(self) -> None:
+        paths = make_release(Path(self.tmp.name), declared=False)
+        paths["wheel"].write_bytes(b"tampered")
+        result = verify_release(paths["release"], declared_attached=False)
+        entry = render_not_uploaded_entry(result.report)
+        self.assertIn("cbc: NOT_UPLOADED (not attached)", entry)
+        self.assertIn("chain FAIL: hash_mismatch", entry)
+        self.assertNotIn("declared as attached", entry)
+
+    def test_f09_missing_remote_asset_expect_uploaded_is_2(self) -> None:
+        paths = make_release(Path(self.tmp.name), uploaded=True)
+        release = {
+            "body": paths["body"].read_text(encoding="utf-8"),
+            "assets": [{"name": WHEEL, "digest": _digest(paths["wheel"])}],
+        }
+        result = verify_release(paths["release"], expect_uploaded=True,
+                                remote="owner/repo", transport=_FakeTransport(release))
+        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(result.report["gate_status"], "PRECONDITION_FAIL")
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-butler.local/schemas/cbc-report.schema.json",
+  "title": "cbc-report/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "package_id", "version", "tag", "gate_status", "exit_code",
+    "cbc_chain_status", "root_hash", "link_count", "broken_link", "upload_status",
+    "verified_link_count", "declared_root_hash", "chain_scope", "chain_profile",
+    "body_hash_scope", "upload_allowed", "upload_blocked_reason", "declared_attached",
+    "anchor_scope", "remote_checked", "skip", "inputs", "error", "checked_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "package_id": {"const": "cbc"},
+    "version": {
+      "oneOf": [
+        {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        {"type": "null"}
+      ]
+    },
+    "tag": {
+      "oneOf": [
+        {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        {"type": "null"}
+      ]
+    },
+    "gate_status": {
+      "enum": ["PASS", "FAIL", "SKIPPED_INFRA", "PRECONDITION_FAIL", "NOT_UPLOADED"]
+    },
+    "exit_code": {"enum": [0, 2, 3, 4]},
+    "cbc_chain_status": {"enum": ["PASS", "FAIL", "SKIPPED_INFRA"]},
+    "root_hash": {
+      "oneOf": [
+        {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "link_count": {"type": "integer", "minimum": 0},
+    "broken_link": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["index", "kind", "name", "reason"],
+          "properties": {
+            "index": {"type": ["integer", "null"]},
+            "kind": {"type": "string", "minLength": 1},
+            "name": {"type": "string", "minLength": 1},
+            "reason": {"type": "string", "minLength": 1},
+            "expected": {"type": ["string", "null"]},
+            "actual": {"type": ["string", "null"]},
+            "detail": {"type": ["string", "null"]}
+          }
+        }
+      ]
+    },
+    "upload_status": {"enum": ["UPLOADED", "NOT_UPLOADED"]},
+    "verified_link_count": {"type": "integer", "minimum": 0},
+    "declared_root_hash": {
+      "oneOf": [
+        {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "chain_scope": {"enum": ["release", "event-log"]},
+    "chain_profile": {"enum": ["sealed-v1", "event-log/v1"]},
+    "body_hash_scope": {
+      "oneOf": [
+        {"enum": ["base", "full"]},
+        {"type": "null"}
+      ]
+    },
+    "upload_allowed": {"type": "boolean"},
+    "upload_blocked_reason": {"type": ["string", "null"]},
+    "declared_attached": {"type": "boolean"},
+    "anchor_scope": {"enum": ["local", "remote"]},
+    "remote_checked": {"type": "boolean"},
+    "skip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cbe_skip_ratio", "cbp_skip_ratio", "effective_skip_ratio", "threshold",
+        "blocking_skip", "not_counted_in_skip_ratio"
+      ],
+      "properties": {
+        "cbe_skip_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "cbp_skip_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "effective_skip_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "threshold": {"const": 0.2},
+        "blocking_skip": {"type": "boolean"},
+        "not_counted_in_skip_ratio": {"const": true}
+      }
+    },
+    "inputs": {"type": "object"},
+    "error": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["code", "detail"],
+          "properties": {
+            "code": {"type": "string"},
+            "detail": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "checked_at": {"type": "string", "minLength": 1}
+  }
+}

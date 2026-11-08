@@ -78,6 +78,37 @@ report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
 report["problems"], report["warnings"], report["critical"]
 ```
 
+## CBC read-only viewer (`cbc_viewer 0.1.0`)
+
+The viewer is in the same repository but is a separate package/entry point. It
+uses only the standard library and `cbc_event.canonical`; `pip install
+cbc-event` does not pull a third-party viewer dependency.
+
+```bash
+pip install -e ".[viewer]"
+
+cbc-viewer verify --scope release --release-dir ./release
+cbc-viewer verify --scope event-log --event-dir ~/.cb/events --chain ./events/cbc-chain.json
+cbc-viewer show --report ./cbc-chain-report.json
+cbc-viewer render-body --report ./cbc-chain-report.json --format appendix
+```
+
+The viewer is **read-only**: there is no upload, publish, delete, tag, release
+edit, or force-update command. Its GitHub transport accepts only `GET`/`HEAD`;
+it writes only an optional report outside the verified source directory. See
+[`docs/release-chain.md`](docs/release-chain.md) for the chain format, exit
+codes, tamper-detection matrix, and the body base/appendix rule.
+
+Two integration facts are deliberate:
+
+- CBC binds identity by **version + tag**, not `package_id`; CBE/CBP may still
+  write the producer id there. This will be tightened only after CBE/CBP define
+  the target-package semantics.
+- The release body hash must declare `body_hash_scope`. `sealed-v1` accepts
+  `base` only: CBP hashes the base body, then the CBC appendix is appended and
+  binds the chain root. A missing `body_hash_scope` or `full` is an input error,
+  never a silent fallback.
+
 ## Compatibility
 
 `cbc-event 0.1.x` may only add fields. Existing field names and types are frozen.
@@ -87,8 +118,16 @@ Consumers must ignore unknown fields and emit a warning.
 
 ```bash
 python -m unittest discover -s tests -v
-python -m coverage run --branch --source=cbc_event -m unittest discover -s tests
-python -m coverage report --fail-under=90
+# POSIX:
+COVERAGE_FILE=.coverage.protocol python -m coverage run --branch --source=./cbc_event -m unittest discover -s tests
+COVERAGE_FILE=.coverage.protocol python -m coverage report --fail-under=90
+COVERAGE_FILE=.coverage.viewer python -m coverage run --branch --source=./cbc_viewer -m unittest discover -s tests
+COVERAGE_FILE=.coverage.viewer python -m coverage report --fail-under=90
+# Windows PowerShell:
+# $env:COVERAGE_FILE=".coverage.protocol"; python -m coverage run --branch --source=./cbc_event -m unittest discover -s tests
+# $env:COVERAGE_FILE=".coverage.protocol"; python -m coverage report --fail-under=90
+# $env:COVERAGE_FILE=".coverage.viewer"; python -m coverage run --branch --source=./cbc_viewer -m unittest discover -s tests
+# $env:COVERAGE_FILE=".coverage.viewer"; python -m coverage report --fail-under=90
 ```
 
 No runtime third-party dependencies. `pytest` and `coverage` are optional test

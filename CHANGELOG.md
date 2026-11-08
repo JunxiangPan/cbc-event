@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — cbc_viewer 0.1.0
+
+- Added the read-only `cbc_viewer` package and `cbc-viewer` entry point:
+  release/event-log hash-chain verification, body rendering, and a GET-only
+  GitHub transport.
+- Added `cbc-chain.schema.json` and `cbc-report.schema.json`; the first chain
+  link is a manifest header binding version/tag/body-hash-scope/source commit.
+- Added the `sealed-v1` body base/appendix rule and F6 NOT_UPLOADED rendering.
+- `cbc_event` 0.1.0 protocol semantics are unchanged.
+
 ## 0.1.0 — 2026-11-06
 
 **`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**

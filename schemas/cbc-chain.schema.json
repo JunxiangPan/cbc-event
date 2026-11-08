@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-butler.local/schemas/cbc-chain.schema.json",
+  "title": "cbc-chain/v1",
+  "oneOf": [
+    {"$ref": "#/$defs/release"},
+    {"$ref": "#/$defs/eventLog"}
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "releaseLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "kind", "role", "name", "sha256", "size", "prev_hash", "link_hash"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 1},
+        "kind": {"enum": ["manifest", "gate_report", "control", "asset"]},
+        "role": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "size": {"type": "integer", "minimum": 0},
+        "prev_hash": {"$ref": "#/$defs/hash"},
+        "link_hash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema", "chain_scope", "chain_profile", "package_id", "version", "tag",
+        "canonicalization", "hash_alg", "genesis", "link_count", "root_hash", "links"
+      ],
+      "properties": {
+        "schema": {"const": "cbc-chain/v1"},
+        "chain_scope": {"const": "release"},
+        "chain_profile": {"const": "sealed-v1"},
+        "package_id": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "tag": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-fA-F]{40}$"},
+        "body_marker": {"const": "CBC-EVIDENCE"},
+        "body_hash_scope": {"enum": ["base", "full"]},
+        "canonicalization": {"const": "cbc-event.canonical/rfc8785"},
+        "hash_alg": {"const": "sha256"},
+        "genesis": {"const": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+        "link_count": {"type": "integer", "minimum": 1},
+        "root_hash": {"$ref": "#/$defs/hash"},
+        "links": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/releaseLink"}}
+      }
+    },
+    "eventFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "sha256", "size", "first_seq", "last_seq"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[^/\\\\\\x00]+\\.jsonl$"},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "size": {"type": "integer", "minimum": 0},
+        "first_seq": {"type": "integer", "minimum": 1},
+        "last_seq": {"type": "integer", "minimum": 1}
+      }
+    },
+    "eventLog": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema", "chain_scope", "files", "head", "link_count", "root_hash"],
+      "properties": {
+        "schema": {"const": "cbc-chain/v1"},
+        "chain_scope": {"const": "event-log"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/eventFile"}},
+        "head": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["seq", "last_hash", "sha256"],
+          "properties": {
+            "seq": {"type": "integer", "minimum": 1},
+            "last_hash": {"$ref": "#/$defs/hash"},
+            "sha256": {"$ref": "#/$defs/hash"}
+          }
+        },
+        "link_count": {"type": "integer", "minimum": 1},
+        "root_hash": {"$ref": "#/$defs/hash"}
+      }
+    }
+  }
+}
