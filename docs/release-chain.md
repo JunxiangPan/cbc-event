@@ -106,6 +106,32 @@ CBP-bound.
   asset `digest`, and tag→commit. Those are checked only in remote mode; local
   mode reports `anchor_scope=local` and cannot claim otherwise.
 
+## Body fragments
+
+`render-body --format cbs-not-uploaded-entry` emits the line for CBS's
+`## NOT_UPLOADED` section:
+
+```text
+# clean, declared attached:
+cbc: NOT_UPLOADED — declared as attached but not uploaded
+
+# broken chain, declared attached:
+cbc: NOT_UPLOADED — declared as attached but not uploaded; broken_link: #5 cbc-0.1.0-py3-none-any.whl — hash_mismatch
+
+# not declared:
+cbc: NOT_UPLOADED (not attached)
+```
+
+`render-body --format appendix` emits the full evidence block:
+
+- PASS + UPLOADED: `## CBC evidence chain` + anchor + `upload_status: UPLOADED`;
+- NOT_UPLOADED: `gate_status: NOT_UPLOADED`, `upload_status: NOT_UPLOADED`,
+  and the exact phrase when declared;
+- broken chain: `## CBC chain failure`, `broken_link: #<index> <name> — <reason>`,
+  `upload_status: NOT_UPLOADED`, no `CBC PASS`;
+- SKIPPED_INFRA: `## Infrastructure failures` with `SKIPPED_INFRA` and
+  `upload_status: NOT_UPLOADED`.
+
 ## Evidence fields
 
 Every report contains:
@@ -207,7 +233,7 @@ body, asset digests, tag commit) can. Reports carry `anchor_scope=local|remote`.
 
 - `CBC-E2E-R01..R19`: release chain happy path and tamper cases
 - `CBC-E2E-S01..S16`: input, upstream, skip, and exit-code contract
-- `CBC-E2E-F01..F09`: F6 NOT_UPLOADED and body rendering
+- `CBC-E2E-F01..F11`: F6 NOT_UPLOADED and body rendering
 - `CBC-E2E-V01..V09`: read-only/AST/report-path boundaries
 - `CBC-E2E-D01..D05`: determinism and no-bypass
 - `CBC-E2E-L01..L08`: event-log chain

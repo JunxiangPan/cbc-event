@@ -169,8 +169,13 @@ def render_appendix(report: Mapping[str, Any]) -> str:
     if status == "FAIL":
         content.append("- scope: blocks the CBC upload only; the CBS main package is not blocked by this section (F6)")
         content.append("- action: no upload performed; fix the artifact or publish a new version with ERRATUM")
-    elif status == "SKIPPED_INFRA":
-        content.append("- publish: blocked for CBC; not counted in the 20% SKIP ratio")
+    if report.get("gate_status") == "SKIPPED_INFRA" or status == "SKIPPED_INFRA":
+        content.extend([
+            "",
+            "## Infrastructure failures",
+            "",
+            "- cbc: **SKIPPED_INFRA** — publish blocked for CBC; not counted in the 20% SKIP ratio",
+        ])
     content.append("- skip_accounting: CBC is not counted in the CBE/CBP SKIP ratio")
     anchor = {
         "schema": "cbc-body-anchor/v1",
@@ -193,15 +198,16 @@ def render_not_uploaded_entry(report: Mapping[str, Any]) -> str:
     declared = bool(report.get("declared_attached"))
     status = str(report.get("cbc_chain_status", "FAIL"))
     if declared:
-        line = "cbc: declared as attached but not uploaded"
+        line = "cbc: NOT_UPLOADED — declared as attached but not uploaded"
     else:
         line = "cbc: NOT_UPLOADED (not attached)"
     if status == "FAIL":
         broken = report.get("broken_link") or {}
         reason = broken.get("reason", "chain_failure")
+        name = broken.get("name", "unknown")
         index = broken.get("index")
-        suffix = f" at link #{index}" if index is not None else ""
-        line += f" (chain FAIL: {reason}{suffix})"
-    elif status == "SKIPPED_INFRA":
-        line += " (SKIPPED_INFRA)"
+        prefix = f"#{index} " if index is not None else ""
+        line += f"; broken_link: {prefix}{name} — {reason}"
+    elif report.get("gate_status") == "SKIPPED_INFRA" or status == "SKIPPED_INFRA":
+        line += "; SKIPPED_INFRA"
     return line

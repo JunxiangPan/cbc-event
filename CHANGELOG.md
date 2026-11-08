@@ -9,7 +9,9 @@
   link is a manifest header binding version/tag/body-hash-scope/source commit.
   `link_count` includes the header/reports/controls/assets; `asset_link_count`
   counts only asset leaves.
-- Added the `sealed-v1` body base/appendix rule and F6 NOT_UPLOADED rendering.
+- Added the `sealed-v1` body base/appendix rule and F6 NOT_UPLOADED rendering;
+  broken chains include `cbc: NOT_UPLOADED`, `broken_link: #<index> <name> — <reason>`,
+  and SKIPPED_INFRA materializes a dedicated `## Infrastructure failures` block.
 - `cbc_event` 0.1.0 protocol semantics are unchanged.
 
 ## 0.1.0 — 2026-11-06

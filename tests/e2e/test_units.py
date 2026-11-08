@@ -191,9 +191,9 @@ class BodyUnitTests(unittest.TestCase):
 
     def test_render_not_uploaded_fail_and_infra(self) -> None:
         base = {"upload_status": "NOT_UPLOADED", "declared_attached": False,
-                "cbc_chain_status": "FAIL", "broken_link": {"reason": "hash_mismatch", "index": 3}}
+                "cbc_chain_status": "FAIL", "broken_link": {"reason": "hash_mismatch", "index": 3, "name": "x"}}
         self.assertEqual(render_not_uploaded_entry(base),
-                         "cbc: NOT_UPLOADED (not attached) (chain FAIL: hash_mismatch at link #3)")
+                         "cbc: NOT_UPLOADED (not attached); broken_link: #3 x — hash_mismatch")
         self.assertIn("SKIPPED_INFRA", render_not_uploaded_entry({**base, "cbc_chain_status": "SKIPPED_INFRA"}))
 
 
