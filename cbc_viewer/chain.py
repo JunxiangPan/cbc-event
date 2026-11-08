@@ -53,6 +53,7 @@ REQUIRED_MANIFEST_FIELDS = (
     "hash_alg",
     "genesis",
     "link_count",
+    "asset_link_count",
     "root_hash",
     "links",
 )
@@ -137,6 +138,7 @@ class ChainManifest:
     links: tuple[dict[str, Any], ...]
     declared_root: str
     declared_link_count: int
+    declared_asset_link_count: int
     version: str
     tag: str
     package_id: str
@@ -144,6 +146,10 @@ class ChainManifest:
     @property
     def link_count(self) -> int:
         return len(self.links)
+
+    @property
+    def asset_link_count(self) -> int:
+        return sum(1 for link in self.links if link.get("kind") == "asset")
 
     def assets(self) -> dict[str, str]:
         return {
@@ -181,6 +187,10 @@ def parse_manifest(data: Any) -> ChainManifest:
     _require(data["genesis"] == GENESIS, "genesis must be sha256:<64 zeros>")
     _require(isinstance(data["link_count"], int) and not isinstance(data["link_count"], bool), "link_count must be an integer")
     _require(data["link_count"] >= 0, "link_count must be >= 0")
+    _require(isinstance(data["asset_link_count"], int) and not isinstance(data["asset_link_count"], bool),
+             "asset_link_count must be an integer")
+    _require(data["asset_link_count"] >= 0, "asset_link_count must be >= 0")
+    _require(data["asset_link_count"] <= data["link_count"], "asset_link_count cannot exceed link_count")
     _require(isinstance(data["root_hash"], str), "root_hash must be a string")
     links = data["links"]
     _require(isinstance(links, list) and links, "links must be a non-empty array")
@@ -202,6 +212,7 @@ def parse_manifest(data: Any) -> ChainManifest:
         links=tuple(links),
         declared_root=data["root_hash"],
         declared_link_count=data["link_count"],
+        declared_asset_link_count=data["asset_link_count"],
         version=data["version"],
         tag=data["tag"],
         package_id=data["package_id"],
@@ -290,6 +301,11 @@ def verify_links(manifest: ChainManifest, release_dir: Path | str) -> LinkCheck:
     if len(manifest.links) != manifest.declared_link_count:
         return LinkCheck(BrokenLink(kind="chain", name="link_count", reason="chain_link_count_mismatch",
                                     expected=str(manifest.declared_link_count), actual=str(len(manifest.links))),
+                         len(manifest.links), prev)
+    if manifest.asset_link_count != manifest.declared_asset_link_count:
+        return LinkCheck(BrokenLink(kind="chain", name="asset_link_count", reason="chain_asset_count_mismatch",
+                                    expected=str(manifest.declared_asset_link_count),
+                                    actual=str(manifest.asset_link_count)),
                          len(manifest.links), prev)
     return LinkCheck(None, len(manifest.links), prev)
 
@@ -492,6 +508,7 @@ def build_manifest(
         links.append(link)
         prev = link["link_hash"]
     data["link_count"] = len(links)
+    data["asset_link_count"] = len(assets)
     data["root_hash"] = links[-1]["link_hash"]
     data["links"] = links
     return data

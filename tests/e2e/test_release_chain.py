@@ -53,6 +53,8 @@ class ReleaseChainTests(unittest.TestCase):
         self.assertEqual(result.report["gate_status"], "PASS")
         self.assertEqual(result.report["upload_status"], "UPLOADED")
         self.assertEqual(result.report["cbc_chain_status"], "PASS")
+        self.assertEqual(result.report["link_count"], 7)
+        self.assertEqual(result.report["asset_link_count"], 2)
 
     def test_r02_clean_not_uploaded(self) -> None:
         result = verify_release(self.paths["release"])
@@ -60,6 +62,8 @@ class ReleaseChainTests(unittest.TestCase):
         self.assertEqual(result.report["gate_status"], "NOT_UPLOADED")
         self.assertEqual(result.report["cbc_chain_status"], "PASS")
         self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+        self.assertEqual(result.report["link_count"], 7)
+        self.assertEqual(result.report["asset_link_count"], 2)
 
     def test_r03_replaced_asset(self) -> None:
         self.paths["wheel"].write_bytes(b"tampered")
@@ -192,6 +196,14 @@ class ReleaseChainTests(unittest.TestCase):
         self.assertEqual(result.exit_code, 3)
         self.assertEqual(result.report["cbc_chain_status"], "FAIL")
         self.assertEqual(result.report["broken_link"]["reason"], "chain_hash_mismatch")
+
+    def test_r19_asset_link_count_mismatch(self) -> None:
+        manifest = json.loads(self.paths["chain"].read_text(encoding="utf-8"))
+        manifest["asset_link_count"] = 1
+        self.paths["chain"].write_text(json.dumps(manifest), encoding="utf-8")
+        result = verify_release(self.paths["release"])
+        self.assertEqual(result.exit_code, 3)
+        self.assertEqual(result.report["broken_link"]["reason"], "chain_asset_count_mismatch")
 
 
 if __name__ == "__main__":

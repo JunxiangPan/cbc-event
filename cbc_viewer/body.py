@@ -87,6 +87,9 @@ def parse_anchor(appendix: bytes) -> dict[str, Any]:
         raise BodyProblem("body_anchor_mismatch", "anchor root_hash is invalid")
     if not isinstance(count, int) or isinstance(count, bool) or count < 0:
         raise BodyProblem("body_anchor_mismatch", "anchor link_count is invalid")
+    asset_count = anchor.get("asset_link_count")
+    if not isinstance(asset_count, int) or isinstance(asset_count, bool) or asset_count < 0:
+        raise BodyProblem("body_anchor_mismatch", "anchor asset_link_count is invalid")
     verified = anchor.get("verified_link_count")
     if verified is not None and (not isinstance(verified, int) or isinstance(verified, bool) or verified < 0):
         raise BodyProblem("body_anchor_mismatch", "anchor verified_link_count is invalid")
@@ -133,6 +136,7 @@ def render_appendix(report: Mapping[str, Any]) -> str:
         root = "sha256:" + ("0" * 64)
     declared = report.get("declared_root_hash")
     link_count = int(report.get("link_count", 0) or 0)
+    asset_link_count = int(report.get("asset_link_count", 0) or 0)
     verified = int(report.get("verified_link_count", 0) or 0)
     upload = str(report.get("upload_status", "NOT_UPLOADED"))
     content: list[str] = []
@@ -152,6 +156,7 @@ def render_appendix(report: Mapping[str, Any]) -> str:
     else:
         content.append(f"- root_hash: `{root}`")
     content.append(f"- link_count: {link_count}" + (f" (verified {verified})" if status == "FAIL" else ""))
+    content.append(f"- asset_link_count: {asset_link_count}")
     content.append(f"- broken_link: {_broken_text(report.get('broken_link'))}")
     content.append(f"- upload_status: **{upload}**")
     reason = report.get("upload_blocked_reason")
@@ -171,6 +176,7 @@ def render_appendix(report: Mapping[str, Any]) -> str:
         "schema": "cbc-body-anchor/v1",
         "root_hash": root,
         "link_count": link_count,
+        "asset_link_count": asset_link_count,
         "verified_link_count": verified,
         "appendix_sha256": sha256_bytes(_content_preimage(content)),
     }

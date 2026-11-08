@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "package_id", "version", "tag", "gate_status", "exit_code",
-    "cbc_chain_status", "root_hash", "link_count", "broken_link", "upload_status",
+    "cbc_chain_status", "root_hash", "link_count", "asset_link_count", "broken_link", "upload_status",
     "verified_link_count", "declared_root_hash", "chain_scope", "chain_profile",
     "body_hash_scope", "upload_allowed", "upload_blocked_reason", "declared_attached",
     "anchor_scope", "remote_checked", "skip", "inputs", "error", "checked_at"
@@ -38,6 +38,7 @@
       ]
     },
     "link_count": {"type": "integer", "minimum": 0},
+    "asset_link_count": {"type": "integer", "minimum": 0},
     "broken_link": {
       "oneOf": [
         {"type": "null"},

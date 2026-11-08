@@ -146,6 +146,44 @@ class ReadOnlyTests(unittest.TestCase):
         self.assertEqual(result.exit_code, 3)
         self.assertEqual(before, after)
 
+    def test_v10_render_body_is_stdout_only(self) -> None:
+        body_source = VIEWER_ROOT / "body.py"
+        body_tree = ast.parse(body_source.read_text(encoding="utf-8"), filename=str(body_source))
+        body_names: set[str] = set()
+        for node in ast.walk(body_tree):
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    body_names.add(node.func.id)
+                elif isinstance(node.func, ast.Attribute):
+                    body_names.add(node.func.attr)
+        self.assertFalse(body_names & {"open", "write_text", "write_bytes", "remove", "unlink", "rename", "replace"})
+
+        cli_source = VIEWER_ROOT / "cli.py"
+        cli_tree = ast.parse(cli_source.read_text(encoding="utf-8"), filename=str(cli_source))
+        render_fn = next(
+            node for node in ast.walk(cli_tree)
+            if isinstance(node, ast.FunctionDef) and node.name == "_run_render"
+        )
+        render_names: set[str] = set()
+        for node in ast.walk(render_fn):
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    render_names.add(node.func.id)
+                elif isinstance(node.func, ast.Attribute):
+                    render_names.add(node.func.attr)
+        self.assertNotIn("_write_report", render_names)
+        self.assertFalse(render_names & {"open", "write_text", "write_bytes"})
+
+        parser = cli._build_parser()
+        render = next(
+            action for action in parser._actions
+            if hasattr(action, "choices") and action.choices and "render-body" in action.choices
+        ).choices["render-body"]
+        option_strings = {opt for action in render._actions for opt in action.option_strings}
+        self.assertNotIn("--report-out", option_strings)
+        self.assertIn("--report", option_strings)
+        self.assertIn("--format", option_strings)
+
 
 if __name__ == "__main__":
     unittest.main()

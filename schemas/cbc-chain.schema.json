@@ -31,7 +31,8 @@
       "additionalProperties": true,
       "required": [
         "schema", "chain_scope", "chain_profile", "package_id", "version", "tag",
-        "canonicalization", "hash_alg", "genesis", "link_count", "root_hash", "links"
+        "canonicalization", "hash_alg", "genesis", "link_count", "asset_link_count",
+        "root_hash", "links"
       ],
       "properties": {
         "schema": {"const": "cbc-chain/v1"},
@@ -47,6 +48,7 @@
         "hash_alg": {"const": "sha256"},
         "genesis": {"const": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
         "link_count": {"type": "integer", "minimum": 1},
+        "asset_link_count": {"type": "integer", "minimum": 0},
         "root_hash": {"$ref": "#/$defs/hash"},
         "links": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/releaseLink"}}
       }

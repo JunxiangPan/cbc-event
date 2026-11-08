@@ -7,6 +7,8 @@
   GitHub transport.
 - Added `cbc-chain.schema.json` and `cbc-report.schema.json`; the first chain
   link is a manifest header binding version/tag/body-hash-scope/source commit.
+  `link_count` includes the header/reports/controls/assets; `asset_link_count`
+  counts only asset leaves.
 - Added the `sealed-v1` body base/appendix rule and F6 NOT_UPLOADED rendering.
 - `cbc_event` 0.1.0 protocol semantics are unchanged.
 

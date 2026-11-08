@@ -45,10 +45,22 @@ The verifier checks, in order:
 - link hash recomputation;
 - duplicate/unsafe names and symlinks;
 - file presence, size, and raw-byte SHA-256;
-- `root_hash` and `link_count`;
+- `root_hash`, `link_count`, and `asset_link_count`;
 - no unlisted file in the release directory;
 - cross-check: chain = `RELEASE_ASSETS.sha256` = CBP `artifact_hashes`, and
   `WHEEL_SHA256` = wheel in the chain.
+
+Two counts are deliberately separate:
+
+```text
+link_count        = all links, including the manifest header, gate reports,
+                    control files, and assets
+asset_link_count  = only links with kind == "asset"
+```
+
+The body prints both. A consumer that needs the asset count (for example a
+CBP `--artifact-type zip-bundle` check) must use `asset_link_count`, never
+compare `link_count` to the number of assets.
 
 ## Body base/appendix rule
 
@@ -62,7 +74,7 @@ CBC appends the appendix after CBP has hashed the base body:
 
 ```text
 <!-- CBC-EVIDENCE-BEGIN -->
-<!-- cbc-evidence {"schema":"cbc-body-anchor/v1","root_hash":"sha256:...","link_count":7,"verified_link_count":7,"appendix_sha256":"sha256:..."} -->
+<!-- cbc-evidence {"schema":"cbc-body-anchor/v1","root_hash":"sha256:...","link_count":7,"asset_link_count":2,"verified_link_count":7,"appendix_sha256":"sha256:..."} -->
 ## CBC evidence chain
 ...
 <!-- CBC-EVIDENCE-END -->
@@ -83,6 +95,17 @@ CBP-bound.
 - `full` — rejected with exit 2 (`body_hash_scope` unsupported);
 - missing — exit 2. This is the CBP P0-06 dependency; CBC does not guess.
 
+## What `appendix_sha256` protects
+
+- **Protects against accidental edits:** if the appendix is modified without
+  recomputing the field, parsing fails with `body_anchor_mismatch`.
+- **Does not protect against deliberate rewrite:** an attacker who rewrites the
+  appendix and recomputes `appendix_sha256` produces a locally consistent body;
+  the self-check cannot distinguish it.
+- **Real tamper resistance comes from the remote anchor:** GitHub release body,
+  asset `digest`, and tag→commit. Those are checked only in remote mode; local
+  mode reports `anchor_scope=local` and cannot claim otherwise.
+
 ## Evidence fields
 
 Every report contains:
@@ -92,6 +115,7 @@ Every report contains:
   "cbc_chain_status": "PASS|FAIL|SKIPPED_INFRA",
   "root_hash": "sha256:...|null",
   "link_count": 7,
+  "asset_link_count": 2,
   "broken_link": null,
   "upload_status": "UPLOADED|NOT_UPLOADED"
 }
@@ -139,6 +163,11 @@ CBC binds `version` + `tag` only. It records `package_id` but does not require
 it to equal `cbc`: CBE/CBP may currently write the producer id (`cbe`/`cbp`).
 Tightening this waits for CBE/CBP target-package semantics.
 
+```text
+TODO(v1.8): when CBE/CBP reports define package_id = target package,
+add package_id == "cbc" check with reason=REPORT_IDENTITY_MISMATCH.
+```
+
 ## Upload boundary
 
 CBC does not upload in this package. A separate uploader, if added later, may
@@ -163,8 +192,9 @@ ERRATUM.
 exposes `get_release`, `get_tag_commit`, `get_asset_bytes`; its private request
 method rejects anything except `GET`/`HEAD`. The package contains no
 `subprocess`, `requests`, or `httpx`; source files are opened read-only; a
-report may be written only outside the verified directory. The AST test suite
-asserts these properties.
+report may be written only outside the verified directory. `render-body` has no
+`--report-out` and writes stdout only. The AST test suite asserts these
+properties, including the `render-body` call path.
 
 ## Trust boundary
 
@@ -175,7 +205,7 @@ body, asset digests, tag commit) can. Reports carry `anchor_scope=local|remote`.
 
 ## E2E matrix
 
-- `CBC-E2E-R01..R18`: release chain happy path and tamper cases
+- `CBC-E2E-R01..R19`: release chain happy path and tamper cases
 - `CBC-E2E-S01..S16`: input, upstream, skip, and exit-code contract
 - `CBC-E2E-F01..F09`: F6 NOT_UPLOADED and body rendering
 - `CBC-E2E-V01..V09`: read-only/AST/report-path boundaries

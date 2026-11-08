@@ -95,7 +95,8 @@ cbc-viewer render-body --report ./cbc-chain-report.json --format appendix
 
 The viewer is **read-only**: there is no upload, publish, delete, tag, release
 edit, or force-update command. Its GitHub transport accepts only `GET`/`HEAD`;
-it writes only an optional report outside the verified source directory. See
+`verify` may write one report outside the verified source directory, and
+`render-body` is stdout-only (no `--report-out`, no write path). See
 [`docs/release-chain.md`](docs/release-chain.md) for the chain format, exit
 codes, tamper-detection matrix, and the body base/appendix rule.
 
@@ -103,11 +104,15 @@ Two integration facts are deliberate:
 
 - CBC binds identity by **version + tag**, not `package_id`; CBE/CBP may still
   write the producer id there. This will be tightened only after CBE/CBP define
-  the target-package semantics.
+  the target-package semantics (tracked as a v1.8 TODO).
 - The release body hash must declare `body_hash_scope`. `sealed-v1` accepts
   `base` only: CBP hashes the base body, then the CBC appendix is appended and
   binds the chain root. A missing `body_hash_scope` or `full` is an input error,
   never a silent fallback.
+
+Reports and body blocks carry both counts: `link_count` includes the manifest
+header and every link, while `asset_link_count` counts only `kind=asset` leaves.
+Consumers must not compare `link_count` to the number of assets.
 
 ## Compatibility
 

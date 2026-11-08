@@ -16,7 +16,7 @@ class SchemaTests(unittest.TestCase):
     def test_report_schema_has_frozen_evidence_fields(self) -> None:
         schema = json.loads((ROOT / "schemas" / "cbc-report.schema.json").read_text(encoding="utf-8"))
         required = set(schema["required"])
-        for field in ("cbc_chain_status", "root_hash", "link_count", "broken_link", "upload_status"):
+        for field in ("cbc_chain_status", "root_hash", "link_count", "asset_link_count", "broken_link", "upload_status"):
             self.assertIn(field, required)
         self.assertIn("NOT_UPLOADED", schema["properties"]["gate_status"]["enum"])
         self.assertEqual(set(schema["properties"]["upload_status"]["enum"]), {"UPLOADED", "NOT_UPLOADED"})

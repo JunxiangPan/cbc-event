@@ -266,7 +266,13 @@ def resolve_identity(
     cli_version: str | None = None,
     cli_tag: str | None = None,
 ) -> tuple[str, str]:
-    """Bind the target by version + tag; package_id is deliberately ignored."""
+    """Bind the target by version + tag; package_id is deliberately ignored.
+
+    TODO(v1.8): once CBE/CBP define whether package_id is the producer or the
+    target package, add a ``package_id == "cbc"`` check with
+    ``reason=REPORT_IDENTITY_MISMATCH``.  Tightening it now would reject every
+    current report whose package_id is ``cbe``/``cbp``.
+    """
     versions: list[str] = []
     for label, value in (
         ("chain", chain_version),
