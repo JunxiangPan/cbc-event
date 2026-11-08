@@ -8,7 +8,15 @@ from __future__ import annotations
 
 from .body import BEGIN, END, BodyProblem, parse_anchor, render_appendix, render_not_uploaded_entry, split_body
 from .chain import GENESIS, build_manifest, compute_link_hash, read_manifest, sha256_bytes, sha256_file, verify_links
-from .errors import BrokenLink, InfraError, InputError, NotFoundError, ReadOnlyViolation
+from .errors import (
+    BrokenLink,
+    InfraError,
+    InputError,
+    MissingBodyHashScope,
+    NotFoundError,
+    ReadOnlyViolation,
+    UnsupportedBodyHashScope,
+)
 from .event_chain import build_event_manifest, verify_event_log
 from .reports import load_gate_reports, validate_cbe, validate_cbp
 from .verify import VerificationResult, verify_event_log_report, verify_release
@@ -21,8 +29,10 @@ __all__ = [
     "GENESIS",
     "InfraError",
     "InputError",
+    "MissingBodyHashScope",
     "NotFoundError",
     "ReadOnlyViolation",
+    "UnsupportedBodyHashScope",
     "VerificationResult",
     "build_event_manifest",
     "build_manifest",

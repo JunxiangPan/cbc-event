@@ -32,6 +32,18 @@ class InputError(ViewerError):
     reason = "input_error"
 
 
+class MissingBodyHashScope(InputError):
+    """CBP report predates the frozen body_hash_scope field (exit 2, FAIL)."""
+
+    reason = "MISSING_BODY_HASH_SCOPE"
+
+
+class UnsupportedBodyHashScope(InputError):
+    """CBP declared a body hash scope that sealed-v1 cannot verify (exit 2, FAIL)."""
+
+    reason = "UNSUPPORTED_BODY_HASH_SCOPE"
+
+
 class InfraError(ViewerError):
     """Provider/network failure; not a PASS and not a silent SKIP (exit 3)."""
 

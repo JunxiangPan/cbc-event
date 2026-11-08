@@ -114,6 +114,11 @@ Reports and body blocks carry both counts: `link_count` includes the manifest
 header and every link, while `asset_link_count` counts only `kind=asset` leaves.
 Consumers must not compare `link_count` to the number of assets.
 
+`F05` (real CBS body-generator compatibility) is skipped in the standalone
+`cbc-event` CI because the sibling `public-release` checkout is absent. The CBS
+v1.7 release-train integration CI must run it with that checkout; a skip there
+means integration acceptance is incomplete.
+
 ## Compatibility
 
 `cbc-event 0.1.x` may only add fields. Existing field names and types are frozen.

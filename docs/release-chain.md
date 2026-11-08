@@ -92,8 +92,16 @@ CBP-bound.
 `body_hash_scope` must exist in the CBP manifest:
 
 - `base` — accepted by `sealed-v1`;
-- `full` — rejected with exit 2 (`body_hash_scope` unsupported);
-- missing — exit 2. This is the CBP P0-06 dependency; CBC does not guess.
+- `full` — rejected with exit 2, `gate_status=FAIL`, error code
+  `UNSUPPORTED_BODY_HASH_SCOPE`;
+- missing — exit 2, `gate_status=FAIL`, error code
+  `MISSING_BODY_HASH_SCOPE`. This is the CBP P0-06 dependency; CBC does not
+  guess.
+
+The `FAIL` here is distinct from `--expect-uploaded` being unconfirmed, which
+is `exit 2` + `gate_status=PRECONDITION_FAIL` + error code
+`expect_uploaded_unmet`. A malformed/missing CBP field is an input failure, not
+a caller precondition.
 
 ## What `appendix_sha256` protects
 
@@ -159,7 +167,8 @@ read-only remote check confirms the release body and every chain asset
 | clean + uploaded | 0 | `PASS` |
 | clean + not uploaded | 0 | `NOT_UPLOADED` |
 | missing/malformed top-level input | 2 | `FAIL` |
-| `--expect-uploaded` not confirmed | 2 | `PRECONDITION_FAIL` |
+| CBP `body_hash_scope` missing/unsupported | 2 | `FAIL` (`MISSING_BODY_HASH_SCOPE` / `UNSUPPORTED_BODY_HASH_SCOPE`) |
+| `--expect-uploaded` not confirmed | 2 | `PRECONDITION_FAIL` (`expect_uploaded_unmet`) |
 | chain/body/remote evidence failure | 3 | `FAIL` |
 | upstream `SKIPPED_INFRA` or CBC infra failure | 3 | `SKIPPED_INFRA` |
 | blocking skip | 3 | `FAIL` |
@@ -222,6 +231,16 @@ report may be written only outside the verified directory. `render-body` has no
 `--report-out` and writes stdout only. The AST test suite asserts these
 properties, including the `render-body` call path.
 
+## F05 integration boundary
+
+`F05` compares the CBC NOT_UPLOADED line against the real CBS
+`release_body_v17.build()` implementation. It is skipped in the standalone
+`cbc-event` CI because that repository does not contain the sibling
+`public-release` checkout. That skip is an environment condition, **not a
+waiver**: the CBS v1.7 release-train integration CI must run F05 with the CBS
+checkout present. If the CBC job in that train also skips F05, integration
+acceptance is incomplete.
+
 ## Trust boundary
 
 Local-only verification detects single-file/subset tampering, missing/extra
@@ -232,7 +251,7 @@ body, asset digests, tag commit) can. Reports carry `anchor_scope=local|remote`.
 ## E2E matrix
 
 - `CBC-E2E-R01..R19`: release chain happy path and tamper cases
-- `CBC-E2E-S01..S16`: input, upstream, skip, and exit-code contract
+- `CBC-E2E-S01..S18`: input, upstream, skip, and exit-code contract
 - `CBC-E2E-F01..F11`: F6 NOT_UPLOADED and body rendering
 - `CBC-E2E-V01..V09`: read-only/AST/report-path boundaries
 - `CBC-E2E-D01..D05`: determinism and no-bypass

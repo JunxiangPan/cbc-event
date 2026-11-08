@@ -1,4 +1,4 @@
-"""CBC-E2E-S01..S16: input, upstream, skip, and exit-code contract."""
+"""CBC-E2E-S01..S18: input, upstream, skip, and exit-code contract."""
 from __future__ import annotations
 
 import json
@@ -127,6 +127,28 @@ class ExitContractTests(unittest.TestCase):
         reseal(self.paths)
         result = self._verify()
         self.assertEqual(result.exit_code, 2)
+
+    def test_s17_missing_body_hash_scope_is_2_fail_not_precondition(self) -> None:
+        cbp = json.loads(self.paths["cbp"].read_text(encoding="utf-8"))
+        cbp.pop("body_hash_scope")
+        self.paths["cbp"].write_text(json.dumps(cbp), encoding="utf-8")
+        reseal(self.paths, upload="UPLOADED")
+        result = verify_release(self.paths["release"], expect_uploaded=True)
+        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(result.report["gate_status"], "FAIL")
+        self.assertEqual(result.report["cbc_chain_status"], "PASS")
+        self.assertEqual(result.report["upload_status"], "NOT_UPLOADED")
+        self.assertEqual(result.report["error"]["code"], "MISSING_BODY_HASH_SCOPE")
+
+    def test_s18_full_body_hash_scope_is_2_unsupported(self) -> None:
+        cbp = json.loads(self.paths["cbp"].read_text(encoding="utf-8"))
+        cbp["body_hash_scope"] = "full"
+        self.paths["cbp"].write_text(json.dumps(cbp), encoding="utf-8")
+        reseal(self.paths, upload="UPLOADED")
+        result = self._verify()
+        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(result.report["gate_status"], "FAIL")
+        self.assertEqual(result.report["error"]["code"], "UNSUPPORTED_BODY_HASH_SCOPE")
 
 
 if __name__ == "__main__":

@@ -12,6 +12,10 @@
 - Added the `sealed-v1` body base/appendix rule and F6 NOT_UPLOADED rendering;
   broken chains include `cbc: NOT_UPLOADED`, `broken_link: #<index> <name> — <reason>`,
   and SKIPPED_INFRA materializes a dedicated `## Infrastructure failures` block.
+- Distinguished CBP `MISSING_BODY_HASH_SCOPE` / `UNSUPPORTED_BODY_HASH_SCOPE`
+  (exit 2, `FAIL`) from `expect_uploaded_unmet` (exit 2, `PRECONDITION_FAIL`).
+- Documented that F05 skips in standalone `cbc-event` CI but must execute in
+  the CBS v1.7 release-train integration CI.
 - `cbc_event` 0.1.0 protocol semantics are unchanged.
 
 ## 0.1.0 — 2026-11-06

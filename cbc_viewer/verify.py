@@ -25,7 +25,14 @@ from .chain import (
     verify_artifacts,
     verify_links,
 )
-from .errors import BrokenLink, InfraError, InputError, NotFoundError
+from .errors import (
+    BrokenLink,
+    InfraError,
+    InputError,
+    MissingBodyHashScope,
+    NotFoundError,
+    UnsupportedBodyHashScope,
+)
 from .event_chain import verify_event_log
 from .reports import GateReports, hash_matches, load_gate_reports
 from .transport import ReadOnlyTransport
@@ -140,18 +147,27 @@ def _input_result(
     tag: str | None,
     inputs: Mapping[str, Any],
     reports: GateReports | None = None,
+    chain_status: str = "FAIL",
+    root_hash: str | None = None,
+    link_count: int = 0,
+    asset_link_count: int = 0,
+    verified_link_count: int = 0,
+    declared_root_hash: str | None = None,
 ) -> VerificationResult:
     report = _report(
         scope=scope,
         version=version,
         tag=tag,
         gate_status="FAIL",
-        chain_status="FAIL",
-        root_hash=None,
-        link_count=0,
+        chain_status=chain_status,
+        root_hash=root_hash,
+        link_count=link_count,
+        asset_link_count=asset_link_count,
         upload_status="NOT_UPLOADED",
+        verified_link_count=verified_link_count,
+        declared_root_hash=declared_root_hash,
         upload_allowed=False,
-        upload_blocked_reason="input_error",
+        upload_blocked_reason=exc.reason,
         skip=_skip_from(reports),
         inputs=inputs,
         error=exc.as_dict(),
@@ -489,13 +505,25 @@ def verify_release(
 
     if reports.body_hash_scope is None:
         return _input_result(
-            InputError("CBP quality manifest is missing body_hash_scope; align CBP P0-06 first"),
+            MissingBodyHashScope("CBP quality manifest is missing body_hash_scope; align CBP P0-06 first"),
             scope="release", version=reports.version, tag=reports.tag, inputs=inputs, reports=reports,
+            chain_status="PASS", root_hash=check.root_hash,
+            link_count=manifest.declared_link_count,
+            asset_link_count=manifest.declared_asset_link_count,
+            verified_link_count=check.verified_count,
+            declared_root_hash=manifest.declared_root,
         )
     if reports.body_hash_scope != "base":
         return _input_result(
-            InputError(f"body_hash_scope={reports.body_hash_scope!r} is not supported by sealed-v1; require 'base'"),
+            UnsupportedBodyHashScope(
+                f"body_hash_scope={reports.body_hash_scope!r} is not supported by sealed-v1; require 'base'"
+            ),
             scope="release", version=reports.version, tag=reports.tag, inputs=inputs, reports=reports,
+            chain_status="PASS", root_hash=check.root_hash,
+            link_count=manifest.declared_link_count,
+            asset_link_count=manifest.declared_asset_link_count,
+            verified_link_count=check.verified_count,
+            declared_root_hash=manifest.declared_root,
         )
 
     try:

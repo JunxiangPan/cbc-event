@@ -19,6 +19,8 @@ class SchemaTests(unittest.TestCase):
         for field in ("cbc_chain_status", "root_hash", "link_count", "asset_link_count", "broken_link", "upload_status"):
             self.assertIn(field, required)
         self.assertIn("NOT_UPLOADED", schema["properties"]["gate_status"]["enum"])
+        self.assertIn("PRECONDITION_FAIL", schema["properties"]["gate_status"]["enum"])
+        self.assertIn("MISSING_BODY_HASH_SCOPE", schema["properties"]["error"]["oneOf"][1]["properties"]["code"]["description"])
         self.assertEqual(set(schema["properties"]["upload_status"]["enum"]), {"UPLOADED", "NOT_UPLOADED"})
 
     def test_chain_schema_has_both_scopes(self) -> None:

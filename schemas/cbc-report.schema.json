@@ -27,7 +27,8 @@
       ]
     },
     "gate_status": {
-      "enum": ["PASS", "FAIL", "SKIPPED_INFRA", "PRECONDITION_FAIL", "NOT_UPLOADED"]
+      "enum": ["PASS", "FAIL", "SKIPPED_INFRA", "PRECONDITION_FAIL", "NOT_UPLOADED"],
+      "description": "FAIL = input/report/chain/upstream failure; PRECONDITION_FAIL = caller precondition not met (for example --expect-uploaded without confirmation); NOT_UPLOADED is the F6 terminal status, never PASS."
     },
     "exit_code": {"enum": [0, 2, 3, 4]},
     "cbc_chain_status": {"enum": ["PASS", "FAIL", "SKIPPED_INFRA"]},
@@ -104,7 +105,7 @@
           "additionalProperties": true,
           "required": ["code", "detail"],
           "properties": {
-            "code": {"type": "string"},
+            "code": {"type": "string", "description": "Machine reason, e.g. MISSING_BODY_HASH_SCOPE, UNSUPPORTED_BODY_HASH_SCOPE, expect_uploaded_unmet."},
             "detail": {"type": "string"}
           }
         }
