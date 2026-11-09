@@ -91,6 +91,11 @@ def make_cbp(*, base: bytes, wheel_hash: str, **overrides: Any) -> dict[str, Any
             {"name": "docs", "status": "PASS", "reason": ""},
         ],
         "artifact_hashes": {"wheel": wheel_hash},
+        "artifact_repository": {
+            "repository": "JunxiangPan/cbc-event",
+            "run_id": "local-test",
+            "artifact_name": "cbc-build-once",
+        },
         "release_body_hash": _hex(base),
         "body_hash_scope": "base",
         "evidence_sha256": "c" * 64,

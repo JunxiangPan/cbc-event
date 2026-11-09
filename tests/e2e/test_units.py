@@ -26,7 +26,7 @@ from cbc_viewer.chain import (
 )
 from cbc_viewer.errors import InfraError, InputError, NotFoundError
 from cbc_viewer.event_chain import build_event_manifest, read_event_manifest, verify_event_log
-from cbc_viewer.reports import hash_matches, load_gate_reports, resolve_identity, validate_cbe, validate_cbp
+from cbc_viewer.reports import canonical_body_sha256, hash_matches, load_gate_reports, resolve_identity, validate_cbe, validate_cbp
 from cbc_viewer.transport import ReadOnlyTransport
 from cbc_viewer.verify import _check_remote, verify_release
 from tests.e2e.fixtures import SDIST, WHEEL, make_cbe, make_cbp, make_release
@@ -240,6 +240,11 @@ class ReportUnitTests(unittest.TestCase):
             lambda d: d.update(gates=[{"name": "x", "status": "OTHER"}]),
             lambda d: d.update(gates=[{"name": "x", "status": "SKIPPED", "reason": ""}]),
             lambda d: d.update(artifact_hashes={"x": "bad"}),
+            lambda d: d.update(artifact_repository="JunxiangPan/cbc-event"),
+            lambda d: d.update(artifact_repository={"repository": "x", "run_id": "y"}),
+            lambda d: d.update(artifact_repository={"repository": "x", "run_id": "y",
+                                                    "artifact_name": "z", "extra": "x"}),
+            lambda d: d.update(schema_version=1),
             lambda d: d.update(release_body_hash="bad"),
             lambda d: d.update(body_hash_scope="other"),
             lambda d: d.update(tag="bad"),
@@ -250,6 +255,11 @@ class ReportUnitTests(unittest.TestCase):
             mutation(value)
             with self.assertRaises(InputError):
                 validate_cbp(value)
+
+    def test_canonical_body_hash(self) -> None:
+        self.assertEqual(canonical_body_sha256(b"x\r\n\r\n"), canonical_body_sha256(b"x\n"))
+        self.assertEqual(canonical_body_sha256(b"\xef\xbb\xbfx"), canonical_body_sha256(b"x"))
+        self.assertTrue(hash_matches(canonical_body_sha256(b"x"), b"x\r\n\r\n"))
 
     def test_identity(self) -> None:
         cbe = make_cbe()

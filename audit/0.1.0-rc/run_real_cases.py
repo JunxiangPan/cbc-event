@@ -232,13 +232,15 @@ def main() -> int:
 
         summary = {
             "manifest_sha256": _hash(INPUTS / "quality-manifest.json"),
-            "manifest_source": "CBP 1.2.0 official release (PyPI/GitHub Release)",
-            "cbp_version": "1.2.0",
-            "cbp_wheel_sha256": "188639bb47e5a8940defbdb5ba3c4270ae89ad68503d283b611cb2a00497da2e",
-            "cbp_sdist_sha256": "08392b2af6b3ff29dc21cfe5db0f23d628307ccac06b9035639f32da6343defd",
+            "manifest_source": "CBP 1.2.2 official release (PyPI/GitHub Release)",
+            "cbp_version": "1.2.2",
+            "cbp_wheel_sha256": "2b73b4a4c387e4eb0700a339235249d62accfbe0a14c505188c53c484df7d046",
+            "cbp_sdist_sha256": "91974398ea0bc850633919e287f546d48b53f08d0ca57befce3a4a091de092d5",
             "superseded_rc_manifests": [
                 "01438d31067f05508454c81af068efc61c9797034c778746b94d77e3de63bac0",
                 "5f952d9bf82413520b87d31a41fba85f49e8242e203f83cc32e6c3d33a5cab20",
+                "32462de20fcf180a4e7e5edae901743311272d84a78f7f22ef99fa2eb03033bb",
+                "9f1cc14c26901ab9f928f45a5d22a60946a763c89c18ea8ed0c54794d75e64c7",
             ],
             "historical_manifest_sha256": "f897bc905d4cebfa82cc83f137440cb0a024e0dd060eaa022bca1fb7a3942724",
             "artifact_hashes": {

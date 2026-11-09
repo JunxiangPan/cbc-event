@@ -103,6 +103,19 @@ is `exit 2` + `gate_status=PRECONDITION_FAIL` + error code
 `expect_uploaded_unmet`. A malformed/missing CBP field is an input failure, not
 a caller precondition.
 
+### CBP 1.2.2 RC2 manifest shape
+
+For contract v1.7.1 RC2, CBC requires:
+
+- `schema_version` is the string `"1"`;
+- `artifact_repository` is an object with exactly
+  `repository`, `run_id`, and `artifact_name` (non-empty strings). A bare
+  string is rejected as legacy/noncanonical, exit 2;
+- `body_hash_scope` is exactly `base`;
+- `release_body_hash` is checked against the §5.3 canonical body: UTF-8 with
+  leading BOM dropped, CRLF and lone CR normalized to LF, trailing newlines
+  stripped, and exactly one LF appended when non-empty.
+
 ## What `appendix_sha256` protects
 
 - **Protects against accidental edits:** if the appendix is modified without

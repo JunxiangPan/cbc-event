@@ -48,6 +48,7 @@ CBP_REQUIRED = (
     "blocking_skip",
     "gates",
     "artifact_hashes",
+    "artifact_repository",
     "release_body_hash",
     "evidence_sha256",
 )
@@ -246,6 +247,14 @@ def validate_cbp(data: Mapping[str, Any]) -> dict[str, Any]:
     for name, value in artifacts.items():
         _require(isinstance(name, str) and name, "CBP artifact_hashes key must be non-empty")
         _hash(value, f"CBP artifact_hashes[{name!r}]")
+    repository = cbp["artifact_repository"]
+    _require(isinstance(repository, dict),
+             "CBP artifact_repository must be an object with repository/run_id/artifact_name (RC2 canonical)")
+    _require(set(repository) == {"repository", "run_id", "artifact_name"},
+             "CBP artifact_repository must contain exactly repository/run_id/artifact_name")
+    for field in ("repository", "run_id", "artifact_name"):
+        _require(isinstance(repository[field], str) and repository[field].strip(),
+                 f"CBP artifact_repository.{field} must be a non-empty string")
     _hash(cbp["release_body_hash"], "CBP release_body_hash")
     _hash(cbp["evidence_sha256"], "CBP evidence_sha256")
     if "tag" in cbp:
@@ -337,13 +346,28 @@ def load_gate_reports(
     )
 
 
-def hash_matches(value: str, data: bytes) -> bool:
-    """Compare a report hash (with or without prefix) to raw bytes."""
+def canonical_body_bytes(data: bytes) -> bytes:
+    """Contract v1.7.1 §5.3 body canonicalization."""
+    if data.startswith(b"\xef\xbb\xbf"):
+        data = data[3:]
+    data = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    data = data.rstrip(b"\n")
+    if data:
+        data += b"\n"
+    return data
+
+
+def canonical_body_sha256(data: bytes) -> str:
     import hashlib
 
+    return hashlib.sha256(canonical_body_bytes(data)).hexdigest()
+
+
+def hash_matches(value: str, data: bytes) -> bool:
+    """Compare a CBP release_body_hash to the canonical base body."""
     try:
         expected = normalize_hash(value)
     except InputError:
         return False
-    actual = "sha256:" + hashlib.sha256(data).hexdigest()
+    actual = "sha256:" + canonical_body_sha256(data)
     return expected == actual

@@ -1,4 +1,4 @@
-# CBP 1.2.0 inputs (official; RC history retained)
+# CBP inputs (1.2.2 current; 1.2.0/RC history retained)
 
 ## Identity
 
@@ -144,3 +144,27 @@ executable chain uses 32462de2 because its body preimage is available.
 Superseded RC evidence: `01438d31…` and `5f952d9b…` are **not used** by the
 executable R02–R19 run. The earlier `f897bc90…` artifacts were not retained and
 remain historical only.
+
+## CBP 1.2.2 official (RC2 object shape)
+
+CBP 1.2.2 is released for CONTRACT v1.7.1 RC2. The CBC manifest was regenerated
+with the official 1.2.2 package:
+
+| item | value |
+|---|---|
+| tag / commit | `v1.2.2` / `d4bfefbd5f66c6bbdb74549b37f1f187fcb61924` |
+| wheel | `2b73b4a4c387e4eb0700a339235249d62accfbe0a14c505188c53c484df7d046` |
+| sdist | `91974398ea0bc850633919e287f546d48b53f08d0ca57befce3a4a091de092d5` |
+| release manifest | `228594d07d7a9906280e7b5ff12fa0b1bf70b22ffff4b3d25983a4bcc072a2c6` |
+| CBC manifest | `81611397bed8aa927718d9900cb509ad6eeb966aed99227e7a85c69e7c1fcede` |
+| `schema_version` | `"1"` (string) |
+| `artifact_repository` | object: `repository` / `run_id` / `artifact_name` |
+| `body_hash_scope` | `base` |
+| canonical body hash | `f0734b62439ea5830e3b2f8ad683f43088f5bd6dda489318724eeab92e3939b1` |
+
+The manifest was generated with `cbp manifest` and the official CBC inputs; it
+is not hand-written. `cbc_viewer.validate_cbp` accepts it, and the RC2 body hash
+uses the contract §5.3 canonical function.
+
+Superseded: the 1.2.0 official manifest `32462de2…` and the earlier RC manifests
+`01438d31…` / `5f952d9b…` are not used by this run.

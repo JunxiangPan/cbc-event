@@ -14,6 +14,8 @@
   and SKIPPED_INFRA materializes a dedicated `## Infrastructure failures` block.
 - Distinguished CBP `MISSING_BODY_HASH_SCOPE` / `UNSUPPORTED_BODY_HASH_SCOPE`
   (exit 2, `FAIL`) from `expect_uploaded_unmet` (exit 2, `PRECONDITION_FAIL`).
+- Accept the contract v1.7.1 RC2 `artifact_repository` object and reject a bare
+  string; check `release_body_hash` against the §5.3 canonical body.
 - Documented that F05 skips in standalone `cbc-event` CI but must execute in
   the CBS v1.7 release-train integration CI.
 - `cbc_event` 0.1.0 protocol semantics are unchanged.

@@ -1,21 +1,23 @@
 {
-  "manifest_sha256": "32462de20fcf180a4e7e5edae901743311272d84a78f7f22ef99fa2eb03033bb",
-  "manifest_source": "CBP 1.2.0 official release (PyPI/GitHub Release)",
-  "cbp_version": "1.2.0",
-  "cbp_wheel_sha256": "188639bb47e5a8940defbdb5ba3c4270ae89ad68503d283b611cb2a00497da2e",
-  "cbp_sdist_sha256": "08392b2af6b3ff29dc21cfe5db0f23d628307ccac06b9035639f32da6343defd",
+  "manifest_sha256": "81611397bed8aa927718d9900cb509ad6eeb966aed99227e7a85c69e7c1fcede",
+  "manifest_source": "CBP 1.2.2 official release (PyPI/GitHub Release)",
+  "cbp_version": "1.2.2",
+  "cbp_wheel_sha256": "2b73b4a4c387e4eb0700a339235249d62accfbe0a14c505188c53c484df7d046",
+  "cbp_sdist_sha256": "91974398ea0bc850633919e287f546d48b53f08d0ca57befce3a4a091de092d5",
   "superseded_rc_manifests": [
     "01438d31067f05508454c81af068efc61c9797034c778746b94d77e3de63bac0",
-    "5f952d9bf82413520b87d31a41fba85f49e8242e203f83cc32e6c3d33a5cab20"
+    "5f952d9bf82413520b87d31a41fba85f49e8242e203f83cc32e6c3d33a5cab20",
+    "32462de20fcf180a4e7e5edae901743311272d84a78f7f22ef99fa2eb03033bb",
+    "9f1cc14c26901ab9f928f45a5d22a60946a763c89c18ea8ed0c54794d75e64c7"
   ],
   "historical_manifest_sha256": "f897bc905d4cebfa82cc83f137440cb0a024e0dd060eaa022bca1fb7a3942724",
   "artifact_hashes": {
     "cbc_event-0.1.0-py3-none-any.whl": "485dc47dd0ca0f69a1e8bcf8f6b1a0523310a492f21ba5463908322f2aacca58",
     "cbc_event-0.1.0.tar.gz": "000c9697ab25e5872cd949e83e4e0ca5c900826da6c1fcbf5e0f21e55f58d598"
   },
-  "release_body_hash": "146d277a1e2f44bc0daccc55888eb8e904caae67ad04a9619ff100e4902845c3",
+  "release_body_hash": "f0734b62439ea5830e3b2f8ad683f43088f5bd6dda489318724eeab92e3939b1",
   "cbe_report_sha256": "721f529b6a9f7b7126a492808d2056d1ba1794d246640d96335ef434ebee0b1d",
-  "base_root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+  "base_root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
   "base_link_count": 7,
   "base_asset_link_count": 2,
   "r01": "NOT RUN \u2014 no uploaded CBC release; upload forbidden by this task",
@@ -28,7 +30,7 @@
       "gate_status": "NOT_UPLOADED",
       "cbc_chain_status": "PASS",
       "broken_link_reason": "",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -41,7 +43,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "hash_mismatch",
-      "root_hash": "sha256:13db88d73e6a5061ef21602926574a8a24b73acba11603b2d693d7166b77efa2",
+      "root_hash": "sha256:061b82d85b5d98ea16bbe30831aaa77b3e864db552e157b1df030fce48d44354",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -54,7 +56,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "unexpected_asset",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -67,7 +69,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "missing_asset",
-      "root_hash": "sha256:ecb0bdb83b5e25d7f09c52ef085f6d3623e51064c85bccd644ea901010e160c4",
+      "root_hash": "sha256:fbfc1241b53a083e3e930cf7710118b08021ce231e3e3c2350f9c5b526ee0b39",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -90,7 +92,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "manifest_conflict",
-      "root_hash": "sha256:6949a5b10a1e2e2765a53b57f274c932da72a26285dda8314aeb6bd9cc0a9b87",
+      "root_hash": "sha256:fa06d4e27e3a26acce9abf3bd7084d5140f7dde47d76af9923993d4c4841ec59",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -103,7 +105,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "hash_mismatch",
-      "root_hash": "sha256:97d9535b992b8abf81f816df3edda6a85c2f7aaffb5b7ed25f1e1f1a30c5e795",
+      "root_hash": "sha256:eec4f23fc4a2a8ad800ba4c45750c789d8cdca9d4755b7ffba429e98a3990e3e",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -116,7 +118,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "body_hash_mismatch",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -129,7 +131,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "body_anchor_mismatch",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -155,7 +157,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "chain_root_mismatch",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 2,
       "pass": true
@@ -206,7 +208,7 @@
       "exit_code": "SKIP",
       "gate_status": null,
       "cbc_chain_status": null,
-      "broken_link_reason": "symlink not permitted: [WinError 1314] \u5ba2\u6237\u7aef\u6ca1\u6709\u6240\u9700\u7684\u7279\u6743\u3002: 'C:\\\\Users\\\\pjx20\\\\AppData\\\\Local\\\\Temp\\\\cbc-real-r-6mmj3s1v\\\\R16\\\\release\\\\cbc_event-0.1.0.tar.gz' -> 'C:\\\\Users\\\\pjx20\\\\AppData\\\\Local\\\\Temp\\\\cbc-real-r-6mmj3s1v\\\\R16\\\\release\\\\cbc_event-0.1.0-py3-none-any.whl'",
+      "broken_link_reason": "symlink not permitted: [WinError 1314] \u5ba2\u6237\u7aef\u6ca1\u6709\u6240\u9700\u7684\u7279\u6743\u3002: 'C:\\\\Users\\\\pjx20\\\\AppData\\\\Local\\\\Temp\\\\cbc-real-r-7xo17y5h\\\\R16\\\\release\\\\cbc_event-0.1.0.tar.gz' -> 'C:\\\\Users\\\\pjx20\\\\AppData\\\\Local\\\\Temp\\\\cbc-real-r-7xo17y5h\\\\R16\\\\release\\\\cbc_event-0.1.0-py3-none-any.whl'",
       "pass": true
     },
     {
@@ -243,7 +245,7 @@
       "gate_status": "FAIL",
       "cbc_chain_status": "FAIL",
       "broken_link_reason": "chain_asset_count_mismatch",
-      "root_hash": "sha256:02f7eca29b0bd3cc1d68da14b6cf3420f9eb28cb52f930239e9f6bbfe411bdce",
+      "root_hash": "sha256:cb5960a3d5410bbf2ae54aec1d49465b4640a3b0df54f7b1e7521b1d6b6a08ce",
       "link_count": 7,
       "asset_link_count": 1,
       "pass": true
