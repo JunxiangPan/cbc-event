@@ -1,9 +1,12 @@
-# Why a real CBP 1.2.0 RC manifest is unavailable for CBC
+# CBP manifest gap — historical, resolved by 855fed7
+
+Status: **RESOLVED** by the `cbp manifest` command in CBP 1.2.0 RC
+`855fed7`. This document is kept as the record of the earlier blocker.
 
 CBC's `validate_cbp()` requires the contract §5 quality manifest, including
 `artifact_hashes`, `release_body_hash`, `evidence_sha256`, gate counts, and
-`body_hash_scope`. CBP 1.2.0 RC exposes no command that generates that document
-for an arbitrary external package.
+`body_hash_scope`. The earlier `5da8b87` RC used for the first audit attempt exposed no
+command that generated that document for an arbitrary external package.
 
 ## Evidence 1 — `--report-json` is a gate report, not a manifest
 
@@ -27,7 +30,7 @@ and `expired_entries`. It has no manifest fields at all
 
 ## Evidence 3 — the RC dogfood manifest generator is CBP-self only
 
-The only full-manifest generator in the RC is hardcoded to CBP:
+In that earlier RC, the only full-manifest generator was hardcoded to CBP:
 
 ```python
 # CBP report schema constants
@@ -54,7 +57,7 @@ would not be a CBP-generated **CBC** manifest.
 
 ## Evidence 4 — RC artifact contains no manifest
 
-The `cbp-rc` artifact from run `42539271566` contains only:
+The `cbp-rc` artifact from the earlier run `42539271566` contained only:
 
 ```text
 cbp_action-1.2.0-py3-none-any.whl
@@ -64,9 +67,9 @@ RC_ASSETS.sha256
 
 No `quality-manifest.json`, no CBC-specific manifest.
 
-## Consequence
+## Historical consequence (before 855fed7)
 
-The only honest ways forward are:
+The earlier RC only had:
 
 1. CBP adds a generic target-package manifest command/artifact (for example
    `--package-manifest-out` with target `package_id`, artifact hashes, and base
@@ -75,5 +78,5 @@ The only honest ways forward are:
    CBP's real gate report with real CBC artifact/body hashes, and labels the
    provenance as an adapter, not as a CBP-emitted manifest.
 
-Until one exists, R01–R19 must stay **NOT RUN**; hand-writing a CBP manifest
-would make the "real" claim false.
+That blocker is now resolved by `855fed7`; the executable R02–R19 run
+uses the regenerated manifest `5f952d9b…` (see `R01_R19.md`).

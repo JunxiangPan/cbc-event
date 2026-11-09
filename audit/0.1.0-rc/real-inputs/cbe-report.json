@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "package_id": "cbc",
+  "producer_id": "cbe",
+  "version": "v0.1.0",
+  "tag": "v0.1.0",
+  "gate_status": "PASS",
+  "exit_code": 0,
+  "applicable_count": 1,
+  "skip_count": 0,
+  "skip_ratio": 0.0,
+  "blocking_skip": false,
+  "warn_count": 0,
+  "rules_manifest_hash": "0fb14eeab24aef6dc1d87e334053603a700589e2597a26aa67c732d25223fb0f",
+  "sarif_paths": [
+    "cbe.sarif"
+  ],
+  "evidence_sha256": "45d36959c8ae878ed9541c80bd38aec3dfd6a1f1a4cb870350b9d422ec9a4db9"
+}

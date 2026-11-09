@@ -1,0 +1,66 @@
+{
+  "applicable_gate_count": 1,
+  "artifact_hashes": {
+    "cbc_event-0.1.0-py3-none-any.whl": "15754c4bc8248fd5cefdb0a2f7208d5a5c9ac08b2924dff62be13cb55cfff817",
+    "cbc_event-0.1.0.tar.gz": "671456eeb83dddf21df2c30c923aed44f658907d941fc711475a32523ef69660"
+  },
+  "artifact_repository": "JunxiangPan/cbc-event",
+  "blocking_skip": false,
+  "body_hash_scope": "base",
+  "evidence_sha256": "535664689bc27d6327b674fcee0c5b24420fbf8d21802fe79fd68103a0a8ded8",
+  "gate_status": "PASS",
+  "gates": [
+    {
+      "name": "claims",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "binary",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "encoding",
+      "reason": "",
+      "status": "PASS"
+    },
+    {
+      "name": "docs",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "custom",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "coverage",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "dependency",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "comments",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    },
+    {
+      "name": "upgrade",
+      "reason": "not configured",
+      "status": "SKIPPED"
+    }
+  ],
+  "package_id": "cbc",
+  "producer_id": "cbp",
+  "release_body_hash": "f63a222681b1e8a67f8de06f693e877a66fd58fe68714819315e42cbe41156de",
+  "schema_version": "1",
+  "skip_count": 0,
+  "skip_ratio": 0.0,
+  "version": "v0.1.0"
+}
