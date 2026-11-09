@@ -9,6 +9,7 @@ This directory is the 0.1.0 release package. The official tag is `v0.1.0` at
 | File | Purpose |
 |---|---|
 | `RELEASE_NOTES.md` | release notes and artifact hashes |
+| `../../audit/0.1.0-rc/FINAL_CLOSEOUT.md` | final closeout, R01 evidence, F05 boundary |
 | `HASHES.md` | source, artifacts, manifest, CBE/chain provenance |
 | `R01_DECISION.md` | strategy B: pre-release R01, then official 0.1.0 |
 | `RELEASE_CHECKLIST.md` | approval, pre-release, R01, official release |

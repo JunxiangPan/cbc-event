@@ -83,7 +83,8 @@ train CI was not available in this workspace; see `F05.md` for the exact scope.
 
 ## Evidence layout
 
-- `../../release/0.1.0/` — prepared 0.1.0 release package (not tagged)
+- `FINAL_CLOSEOUT.md` — released state, assets, R01, and F05 boundary
+- `../../release/0.1.0/` — 0.1.0 release package and hashes
 - `CBP_RC_INPUTS.md` — official CBP 1.2.2 provenance, hashes, manifest repro
   (1.2.0/RC history retained below)
 - `CBP_MANIFEST_GAP.md` — history from the earlier missing-generator state
