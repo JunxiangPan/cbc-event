@@ -2,13 +2,15 @@
 
 ## Verdict
 
-**PARTIAL — R02–R19 real inputs pass; R01 is NOT RUN.**
+**PARTIAL — R02–R19 real inputs pass; R01 local test index pass; real GitHub R01 NOT RUN.**
 
 R02–R19 were executed against a real CBE report, real CBC wheel/sdist, and a
-real CBP 1.2.0 RC external-package manifest. R01 requires an uploaded GitHub
-release; no CBC release exists and this audit must not upload, so R01 is
-**NOT RUN** and is not counted as PASS. R16 is skipped on Windows only because
-the runner cannot create a symlink; CBC's Linux CI executes that path.
+real CBP 1.2.0 RC external-package manifest. R01 was also executed against a
+**one-off local release test index** (real body + real asset digests, no network,
+no GitHub claim); its result is `PASS/UPLOADED` only in that local scope. A real
+GitHub-release R01 remains **NOT RUN** because no CBC release exists and this
+audit must not upload. R16 is skipped on Windows only because the runner cannot
+create a symlink; CBC's Linux CI executes that path.
 
 ## Inputs
 
@@ -41,7 +43,7 @@ appendix with `render_appendix`; it does not hand-write links. Full result:
 
 | Case | Result |
 |---|---|
-| R01 clean uploaded | **NOT RUN** — no uploaded CBC release; upload forbidden |
+| R01 clean uploaded | **LOCAL TEST INDEX PASS**; real GitHub release **NOT RUN** (no upload allowed) |
 | R02 clean not uploaded | exit 0, chain PASS, NOT_UPLOADED |
 | R03 replaced asset | exit 3, hash_mismatch |
 | R04 extra asset | exit 3, unexpected_asset |
@@ -61,8 +63,10 @@ appendix with `render_appendix`; it does not hand-write links. Full result:
 | R18 header metadata bound | exit 3, chain_hash_mismatch |
 | R19 asset_link_count | exit 3, chain_asset_count_mismatch |
 
-`passed=18`, `total=19` in the JSON: 18 executed cases passed; R01 is the
-excluded NOT-RUN case. R16's SKIP is explicitly recorded, not converted to PASS.
+`passed=18`, `total=19` in `real_r01_r19_results.json` covers R02–R19 only;
+R01 is the excluded real-GitHub case. The local R01 result is separate:
+`local_r01_result.json` and `raw/local-r01.stdout`. R16's SKIP is explicitly
+recorded, not converted to PASS.
 
 ## F05
 
@@ -79,7 +83,9 @@ train CI was not available in this workspace; see `F05.md` for the exact scope.
 - `F05.md` — standalone vs train-like evidence
 - `VIEWER_PATHS.md` — three viewer error paths
 - `real-inputs/` — real CBE report, CBP manifest, body, wheel/sdist
-- `real_r01_r19_results.json` — machine-readable case results
-- `run_real_cases.py` — harness
+- `real_r01_r19_results.json` — machine-readable R02–R19 results
+- `local_r01_result.json` — R01 local test-index result (not GitHub)
+- `run_local_r01.py` — local R01 harness
+- `run_real_cases.py` — R02–R19 harness
 - `raw/` — unedited command output
 - `SHA256SUMS` — audit file hashes (this file excluded)
