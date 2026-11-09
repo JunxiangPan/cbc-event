@@ -1,0 +1,25 @@
+{
+  "scope": "local test index, not GitHub",
+  "manifest_sha256": "a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c",
+  "body_sha256": "e30c24b348f6aaec28b5d5baa23afd3da73e580c026d3d881be51d12bbbab556",
+  "assets": [
+    {
+      "name": "cbc_event-0.1.0-py3-none-any.whl",
+      "size": 36713,
+      "digest": "sha256:25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59"
+    },
+    {
+      "name": "cbc_event-0.1.0.tar.gz",
+      "size": 35913,
+      "digest": "sha256:ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59"
+    }
+  ],
+  "exit_code": 0,
+  "gate_status": "PASS",
+  "cbc_chain_status": "PASS",
+  "upload_status": "UPLOADED",
+  "root_hash": "sha256:95d104b5f99cabae5adc7dfd8dad6fda8be8a7a93faaf75fac8162901645688c",
+  "link_count": 7,
+  "asset_link_count": 2,
+  "anchor_scope": "remote"
+}

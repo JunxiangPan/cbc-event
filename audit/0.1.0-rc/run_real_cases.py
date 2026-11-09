@@ -241,6 +241,7 @@ def main() -> int:
                 "5f952d9bf82413520b87d31a41fba85f49e8242e203f83cc32e6c3d33a5cab20",
                 "32462de20fcf180a4e7e5edae901743311272d84a78f7f22ef99fa2eb03033bb",
                 "9f1cc14c26901ab9f928f45a5d22a60946a763c89c18ea8ed0c54794d75e64c7",
+                "81611397bed8aa927718d9900cb509ad6eeb966aed99227e7a85c69e7c1fcede",
             ],
             "historical_manifest_sha256": "f897bc905d4cebfa82cc83f137440cb0a024e0dd060eaa022bca1fb7a3942724",
             "artifact_hashes": {
