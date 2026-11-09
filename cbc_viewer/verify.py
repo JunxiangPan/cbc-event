@@ -11,6 +11,7 @@ unconfirmed upload is ``exit 2`` + ``PRECONDITION_FAIL`` (F1 alignment), never
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -36,6 +37,9 @@ from .errors import (
 from .event_chain import verify_event_log
 from .reports import GateReports, hash_matches, load_gate_reports
 from .transport import ReadOnlyTransport
+
+PRE_RELEASE_TAG_RE = re.compile(r"^v[0-9]+\.[0-9]+\.[0-9]+-[0-9A-Za-z.-]+$")
+REMOTE_TAG_RE = re.compile(r"^v[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$")
 
 
 @dataclass(frozen=True)
@@ -440,6 +444,7 @@ def verify_release(
     body_path: Path | str | None = None,
     version: str | None = None,
     tag: str | None = None,
+    remote_tag: str | None = None,
     expect_uploaded: bool = False,
     declared_attached: bool = False,
     remote: str | None = None,
@@ -457,6 +462,28 @@ def verify_release(
         "cbp_manifest": str(cbp_p),
         "body": str(body_p),
     }
+    if remote_tag is not None:
+        inputs["remote_tag"] = remote_tag
+
+    # A pre-release tag is a remote-release coordinate, not the subject
+    # version/tag bound by the chain.  --tag may carry it for backwards
+    # compatibility; --remote-tag is the explicit form.
+    if remote_tag is not None and remote is None:
+        return _input_result(InputError("--remote-tag requires --remote"), scope="release",
+                             version=version, tag=tag, inputs=inputs)
+    if remote_tag is not None and not REMOTE_TAG_RE.fullmatch(remote_tag):
+        return _input_result(InputError(f"invalid remote tag: {remote_tag!r}"), scope="release",
+                             version=version, tag=tag, inputs=inputs)
+    if tag is not None and PRE_RELEASE_TAG_RE.fullmatch(tag):
+        if remote is None:
+            return _input_result(InputError("--tag pre-release requires --remote"), scope="release",
+                                 version=version, tag=tag, inputs=inputs)
+        if remote_tag is not None and remote_tag != tag:
+            return _input_result(InputError("remote tag mismatch between --tag and --remote-tag"),
+                                 scope="release", version=version, tag=tag, inputs=inputs)
+        remote_tag = tag
+        tag = None
+        inputs["remote_tag"] = remote_tag
 
     reports: GateReports | None = None
     manifest: ChainManifest | None = None
@@ -581,7 +608,7 @@ def verify_release(
         try:
             owner, repo = _parse_remote(remote)
             active = transport or ReadOnlyTransport()
-            remote_check = _check_remote(active, owner, repo, reports.tag, manifest, body_data)
+            remote_check = _check_remote(active, owner, repo, remote_tag or reports.tag, manifest, body_data)
         except NotFoundError as exc:
             if expect_uploaded:
                 return _precondition_result(

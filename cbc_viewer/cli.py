@@ -30,6 +30,7 @@ def _build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--version-id", dest="target_version")
     verify.add_argument("--tag")
     verify.add_argument("--remote", help="owner/repo; read-only GitHub check")
+    verify.add_argument("--remote-tag", help="remote release tag when it differs from the chain tag (e.g. a pre-release)")
     verify.add_argument("--expect-uploaded", action="store_true")
     verify.add_argument("--declared-attached", action="store_true")
     verify.add_argument("--report-out")

@@ -187,6 +187,28 @@ class F6Tests(unittest.TestCase):
         self.assertIn("declared as attached but not uploaded", entry)
         self.assertIn("SKIPPED_INFRA", entry)
 
+    def test_f12_pre_release_remote_tag(self) -> None:
+        uploaded = make_release(Path(self.tmp.name) / "pre", uploaded=True)
+        remote = {
+            "body": uploaded["body"].read_text(encoding="utf-8"),
+            "assets": [
+                {"name": WHEEL, "digest": _digest(uploaded["wheel"])},
+                {"name": SDIST, "digest": _digest(uploaded["sdist"])},
+            ],
+        }
+        passed = verify_release(
+            uploaded["release"],
+            tag="v0.1.0-rc.1",
+            remote="owner/repo",
+            transport=_FakeTransport(remote),
+            expect_uploaded=True,
+        )
+        self.assertEqual(passed.exit_code, 0)
+        self.assertEqual(passed.report["gate_status"], "PASS")
+        self.assertEqual(passed.report["upload_status"], "UPLOADED")
+        self.assertEqual(passed.report["tag"], "v0.1.0")
+        self.assertEqual(passed.report["inputs"]["remote_tag"], "v0.1.0-rc.1")
+
     def test_f11_render_body_cli_broken_chain(self) -> None:
         paths = make_release(Path(self.tmp.name), declared=True)
         paths["wheel"].write_bytes(b"tampered")

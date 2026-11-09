@@ -16,6 +16,8 @@
   (exit 2, `FAIL`) from `expect_uploaded_unmet` (exit 2, `PRECONDITION_FAIL`).
 - Accept the contract v1.7.1 RC2 `artifact_repository` object and reject a bare
   string; check `release_body_hash` against the §5.3 canonical body.
+- Allow a pre-release remote tag (for example `v0.1.0-rc.1`) via `--tag` or
+  `--remote-tag` while keeping the chain's release tag authoritative.
 - Documented that F05 skips in standalone `cbc-event` CI but must execute in
   the CBS v1.7 release-train integration CI.
 - `cbc_event` 0.1.0 protocol semantics are unchanged.

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "package_id": "cbc",
+  "version": "v0.1.0",
+  "tag": "v0.1.0",
+  "gate_status": "PASS",
+  "exit_code": 0,
+  "cbc_chain_status": "PASS",
+  "root_hash": "sha256:95d104b5f99cabae5adc7dfd8dad6fda8be8a7a93faaf75fac8162901645688c",
+  "link_count": 7,
+  "asset_link_count": 2,
+  "broken_link": null,
+  "upload_status": "UPLOADED",
+  "verified_link_count": 7,
+  "declared_root_hash": "sha256:95d104b5f99cabae5adc7dfd8dad6fda8be8a7a93faaf75fac8162901645688c",
+  "chain_scope": "release",
+  "chain_profile": "sealed-v1",
+  "body_hash_scope": "base",
+  "upload_allowed": true,
+  "upload_blocked_reason": null,
+  "declared_attached": false,
+  "anchor_scope": "remote",
+  "remote_checked": true,
+  "skip": {
+    "cbe_skip_ratio": 0.0,
+    "cbp_skip_ratio": 0.0,
+    "effective_skip_ratio": 0.0,
+    "threshold": 0.2,
+    "blocking_skip": false,
+    "not_counted_in_skip_ratio": true
+  },
+  "inputs": {
+    "release_dir": "..\\tmp-cbc-rc1-release\\release",
+    "chain": "..\\tmp-cbc-rc1-release\\release\\cbc-chain.json",
+    "cbe_report": "..\\tmp-cbc-rc1-release\\release\\cbe-report.json",
+    "cbp_manifest": "..\\tmp-cbc-rc1-release\\release\\quality-manifest.json",
+    "body": "..\\tmp-cbc-rc1-release\\release\\RELEASE_BODY.md",
+    "remote_tag": "v0.1.0-rc.1"
+  },
+  "error": null,
+  "checked_at": "2026-11-09T15:47:10Z"
+}
