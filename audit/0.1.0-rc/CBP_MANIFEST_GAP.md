@@ -1,7 +1,7 @@
-# CBP manifest gap — historical, resolved by 855fed7
+# CBP manifest gap — historical, resolved by CBP 1.2.0 official
 
-Status: **RESOLVED** by the `cbp manifest` command in CBP 1.2.0 RC
-`855fed7`. This document is kept as the record of the earlier blocker.
+Status: **RESOLVED** by the `cbp manifest` command in the official CBP 1.2.0
+release. This document is kept as the record of the earlier blocker.
 
 CBC's `validate_cbp()` requires the contract §5 quality manifest, including
 `artifact_hashes`, `release_body_hash`, `evidence_sha256`, gate counts, and
@@ -67,7 +67,7 @@ RC_ASSETS.sha256
 
 No `quality-manifest.json`, no CBC-specific manifest.
 
-## Historical consequence (before 855fed7)
+## Historical consequence (before the official release)
 
 The earlier RC only had:
 
@@ -78,5 +78,5 @@ The earlier RC only had:
    CBP's real gate report with real CBC artifact/body hashes, and labels the
    provenance as an adapter, not as a CBP-emitted manifest.
 
-That blocker is now resolved by `855fed7`; the executable R02–R19 run
-uses the regenerated manifest `5f952d9b…` (see `R01_R19.md`).
+That blocker is now resolved by the official CBP 1.2.0 release; the
+executable R02–R19 run uses official manifest `32462de2…` (see `R01_R19.md`).

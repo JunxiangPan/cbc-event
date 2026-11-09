@@ -1,13 +1,13 @@
 {
   "applicable_gate_count": 1,
   "artifact_hashes": {
-    "cbc_event-0.1.0-py3-none-any.whl": "15754c4bc8248fd5cefdb0a2f7208d5a5c9ac08b2924dff62be13cb55cfff817",
-    "cbc_event-0.1.0.tar.gz": "671456eeb83dddf21df2c30c923aed44f658907d941fc711475a32523ef69660"
+    "cbc_event-0.1.0-py3-none-any.whl": "485dc47dd0ca0f69a1e8bcf8f6b1a0523310a492f21ba5463908322f2aacca58",
+    "cbc_event-0.1.0.tar.gz": "000c9697ab25e5872cd949e83e4e0ca5c900826da6c1fcbf5e0f21e55f58d598"
   },
   "artifact_repository": "JunxiangPan/cbc-event",
   "blocking_skip": false,
   "body_hash_scope": "base",
-  "evidence_sha256": "535664689bc27d6327b674fcee0c5b24420fbf8d21802fe79fd68103a0a8ded8",
+  "evidence_sha256": "454a845a162a4a6ca858af4cc819732197368d3ad17212a925375bf8f807e3f6",
   "gate_status": "PASS",
   "gates": [
     {
@@ -58,7 +58,7 @@
   ],
   "package_id": "cbc",
   "producer_id": "cbp",
-  "release_body_hash": "f63a222681b1e8a67f8de06f693e877a66fd58fe68714819315e42cbe41156de",
+  "release_body_hash": "146d277a1e2f44bc0daccc55888eb8e904caae67ad04a9619ff100e4902845c3",
   "schema_version": "1",
   "skip_count": 0,
   "skip_ratio": 0.0,

@@ -232,8 +232,15 @@ def main() -> int:
 
         summary = {
             "manifest_sha256": _hash(INPUTS / "quality-manifest.json"),
+            "manifest_source": "CBP 1.2.0 official release (PyPI/GitHub Release)",
+            "cbp_version": "1.2.0",
+            "cbp_wheel_sha256": "188639bb47e5a8940defbdb5ba3c4270ae89ad68503d283b611cb2a00497da2e",
+            "cbp_sdist_sha256": "08392b2af6b3ff29dc21cfe5db0f23d628307ccac06b9035639f32da6343defd",
+            "superseded_rc_manifests": [
+                "01438d31067f05508454c81af068efc61c9797034c778746b94d77e3de63bac0",
+                "5f952d9bf82413520b87d31a41fba85f49e8242e203f83cc32e6c3d33a5cab20",
+            ],
             "historical_manifest_sha256": "f897bc905d4cebfa82cc83f137440cb0a024e0dd060eaa022bca1fb7a3942724",
-            "manifest_source": "CBP 1.2.0 RC 855fed7 external-package manifest; f897 artifacts were not retained",
             "artifact_hashes": {
                 WHEEL: _hash(INPUTS / WHEEL),
                 SDIST: _hash(INPUTS / SDIST),
