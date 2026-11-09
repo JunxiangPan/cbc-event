@@ -1,15 +1,16 @@
-# CBC 0.1.0 RC audit — 2026-11-09
+# CBC 0.1.0 audit — released 2026-11-10
 
 ## Verdict
 
-**PARTIAL — R02–R19 real inputs pass; R01 real GitHub PASS on pre-release `v0.1.0-rc.2`; official `v0.1.0` NOT CREATED.**
+**RELEASED — official `v0.1.0` published from the `v0.1.0-rc.2` bytes; R01 real GitHub PASS; R02–R19 18/18. F05 full CBS train not run.**
 
 R02–R19 were executed against a real CBE report, real CBC wheel/sdist, and a
 real CBP 1.2.2 official external-package manifest (RC2 object shape). R01 was first exercised against a local test index, then against a real
 **GitHub pre-release** `v0.1.0-rc.2` (tag at `5cdc9a1`, exact wheel/sdist/body).
 The real GitHub run is `PASS/UPLOADED`; the local result is still not a GitHub
-PASS. The official `v0.1.0` tag/release has **not** been created. R16 is skipped on Windows only because the runner cannot
-create a symlink; CBC's Linux CI executes that path.
+PASS. The official `v0.1.0` tag/release was created from the same rc.2 bytes and
+passed a post-release R01. R16 is skipped on Windows only because the runner
+cannot create a symlink; CBC's Linux CI executes that path.
 
 ## Inputs
 
@@ -47,7 +48,7 @@ appendix with `render_appendix`; it does not hand-write links. Full result:
 
 | Case | Result |
 |---|---|
-| R01 clean uploaded | **REAL GitHub PASS on `v0.1.0-rc.2`**; local test index also PASS; official `v0.1.0` not created |
+| R01 clean uploaded | **REAL GitHub PASS on official `v0.1.0`** (and pre-release rc.2); local test index separate |
 | R02 clean not uploaded | exit 0, chain PASS, NOT_UPLOADED |
 | R03 replaced asset | exit 3, hash_mismatch |
 | R04 extra asset | exit 3, unexpected_asset |
@@ -68,8 +69,9 @@ appendix with `render_appendix`; it does not hand-write links. Full result:
 | R19 asset_link_count | exit 3, chain_asset_count_mismatch |
 
 `passed=18`, `total=19` in `real_r01_r19_results.json` covers R02–R19 only.
-R01 evidence is separate: `local_r01_result.json` (local only) and
-`raw/r01-rc2.stdout` (real GitHub pre-release PASS). R16's SKIP is explicitly
+R01 evidence is separate: `local_r01_result.json` (local only),
+`raw/r01-rc2.stdout` (real GitHub pre-release PASS), and
+`raw/r01-official.stdout` (real GitHub official PASS). R16's SKIP is explicitly
 recorded, not converted to PASS.
 
 ## F05

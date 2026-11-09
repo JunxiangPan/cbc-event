@@ -1,14 +1,14 @@
 # CBC 0.1.0 release checklist
 
-**Current state: NOT APPROVED — no tag, no release, no PyPI upload.**
+**Current state: RELEASED — official `v0.1.0`; no PyPI upload.**
 
 ## 0. Human approval
 
 - [x] Human approved the 0.1.0 candidate and the R01 strategy (B).
 - [x] Human approved creating a pre-release.
-- [ ] Human approves the final `v0.1.0` release after R01 passes.
+- [x] Human approved the final `v0.1.0` release after R01 passed.
 
-No tag/release action is performed before the corresponding approval.
+The official actions below were performed after the corresponding approval.
 
 ## 1. Candidate inputs
 
@@ -56,20 +56,20 @@ Preconditions:
 
 - [x] Real GitHub R01 for `v0.1.0-rc.2` passed.
 - [x] R02–R19 18/18 still tied to the same hashes.
-- [ ] Human approval for the official release.
+- [x] Human approval for the official release.
 - [x] F05 boundary is disclosed; full CBS v1.7 train is not claimed.
 
 Actions:
 
-- [ ] Create `v0.1.0` at the same source commit.
-- [ ] Upload the **same bytes** (no rebuild, no rehash).
-- [ ] Mark `v0.1.0` as the official release.
-- [ ] Keep `v0.1.0-rc.1` and `v0.1.0-rc.2` as pre-release audit trails (or
+- [x] Create `v0.1.0` at the same source commit.
+- [x] Upload the **same bytes** (no rebuild, no rehash).
+- [x] Mark `v0.1.0` as the official release.
+- [x] Keep `v0.1.0-rc.1` and `v0.1.0-rc.2` as pre-release audit trails (or
       delete them only under the approved release policy; never retag them).
 
 ## 5. Post-release (not a substitute for pre-release R01)
 
-- [ ] Optionally rerun `cbc-viewer verify --remote ... --tag v0.1.0
+- [x] Optionally rerun `cbc-viewer verify --remote ... --tag v0.1.0
       --expect-uploaded` against the official release as a post-release smoke
       check.
 - [ ] PyPI publication is a separate decision; this checklist does not upload

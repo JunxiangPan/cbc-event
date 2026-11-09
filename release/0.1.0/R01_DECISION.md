@@ -39,8 +39,8 @@ a new version/ERRATUM. That is the wrong order for a release gate.
 | Item | Status |
 |---|---|
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **PASS** on `v0.1.0-rc.2` |
-| Official 0.1.0 tag | **NOT CREATED** |
+| R01 real GitHub | **PASS** on official `v0.1.0` |
+| Official 0.1.0 tag | **CREATED** at `5cdc9a1` |
 | Test release | `v0.1.0-rc.1` retained; `v0.1.0-rc.2` passed |
 
 ## What must not be written
@@ -59,4 +59,4 @@ human approval
   -> post-release verification / PyPI decision (separate)
 ```
 
-`v0.1.0-rc.1` and `v0.1.0-rc.2` are pre-releases; official `v0.1.0` is not created.
+`v0.1.0-rc.1` and `v0.1.0-rc.2` remain pre-releases; official `v0.1.0` was created from the same rc.2 bytes.

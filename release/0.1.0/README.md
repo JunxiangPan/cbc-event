@@ -1,10 +1,10 @@
-# CBC 0.1.0 release package — candidate
+# CBC 0.1.0 release package — released
 
-**Status: PRE-RELEASE `v0.1.0-rc.2` PASSED R01; official `v0.1.0` NOT CREATED.**
+**Status: RELEASED — official `v0.1.0` published from the exact `v0.1.0-rc.2` bytes; no PyPI upload.**
 
-This directory is the prepared 0.1.0 release package. It is intentionally not
-tagged. Human approval is required before the pre-release and before the
-official release.
+This directory is the 0.1.0 release package. The official tag is `v0.1.0` at
+`5cdc9a1`; the package/hash documentation is at `153088c`, with a later
+`TAG_NOTE.md`. `v0.1.0-rc.2` remains as the pre-release audit trail.
 
 | File | Purpose |
 |---|---|
@@ -22,7 +22,7 @@ official release.
 | R02–R19 | 18/18 assertions |
 | R16 | Windows SKIP; Linux CI covers |
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **PASS** on pre-release `v0.1.0-rc.2` |
+| R01 real GitHub | **PASS** on official `v0.1.0` |
 | F05 train-like | OK |
 | F05 full CBS train | **NOT RUN** |
 | CI | Ubuntu + Windows green |
@@ -31,7 +31,7 @@ official release.
 
 **B — pre-release test release first, then official 0.1.0.** R01 is a
 pre-release acceptance gate; the real pre-release run passed. Local R01 is
-never written as GitHub R01 PASS. Official `v0.1.0` is not created yet.
+never written as GitHub R01 PASS. Official `v0.1.0` was created after the pre-release R01 passed.
 
 ## Source and artifacts
 
@@ -42,7 +42,7 @@ never written as GitHub R01 PASS. Official `v0.1.0` is not created yet.
 
 ## Boundaries
 
-- No tag/release/PyPI action in this package.
+- Official tag/release created; no PyPI action in this package.
 - F05 full-train PASS is not claimed.
 - The manifest's `artifact_repository.run_id` is local
   (`local-cbc-build-once`), not a GitHub run; the RC2 object shape is valid but

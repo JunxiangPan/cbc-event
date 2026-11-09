@@ -1,6 +1,6 @@
-# CBC 0.1.0 candidate — hashes and provenance
+# CBC 0.1.0 — hashes and provenance
 
-**Status: candidate only; no tag and no release.**
+**Status: RELEASED — official `v0.1.0`; no PyPI upload.**
 
 ## Source
 
@@ -56,10 +56,9 @@ release if the release policy requires remote coordinate verification.
 | R02–R19 | 18/18 assertions passed |
 | R16 | Windows SKIP; Linux CI covers |
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **PASS** on pre-release `v0.1.0-rc.2` |
+| R01 real GitHub | **PASS** on official `v0.1.0` |
 | F05 train-like | OK |
 | F05 full CBS v1.7 train | **NOT RUN** |
 
-R01 passed on the pre-release; the official `v0.1.0` is still not created. F05
-is **not** a full-train PASS. See `R01_DECISION.md` and
+R01 passed on the official release; F05 is **not** a full-train PASS. See `R01_DECISION.md` and
 `RELEASE_CHECKLIST.md`.

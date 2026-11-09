@@ -1,7 +1,7 @@
-# CBC 0.1.0 — release notes (candidate)
+# CBC 0.1.0 — release notes
 
-**Status: PRE-RELEASE ONLY.** `v0.1.0-rc.2` exists and passed R01; official
-`v0.1.0` is not tagged or published.
+**Status: RELEASED.** Official `v0.1.0` reuses the exact `v0.1.0-rc.2` bytes.
+No PyPI upload.
 
 ## What this release is
 
@@ -29,8 +29,9 @@ release.
 
 - CBP 1.2.2 official manifest: `e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50`
 - R02–R19: **18/18 assertions passed** (R16 Windows SKIP, Linux CI covers)
-- R01: real GitHub **PASS** on pre-release `v0.1.0-rc.2` (exit 0, PASS,
-  UPLOADED); local test index is separate and is not a GitHub PASS
+- R01: real GitHub **PASS** on official `v0.1.0` (exit 0, PASS, UPLOADED),
+  after the pre-release rc.2 PASS; local test index is separate and is not a
+  GitHub PASS
 - F05: train-like with real CBS source **OK**; full CBS v1.7 train **NOT RUN**
 - CI: Ubuntu + Windows green on the candidate commit.
 
@@ -46,9 +47,9 @@ release.
 
 ## Boundaries
 
-- The GitHub R01 PASS is for the **pre-release** `v0.1.0-rc.2`, not for an
-official `v0.1.0` release (which does not exist yet). The local test-index
-result must never be presented as a GitHub R01 PASS.
+- The official `v0.1.0` is a release; `v0.1.0-rc.2` remains the pre-release
+audit trail. The local test-index result must never be presented as a GitHub
+R01 PASS.
 - F05 is **not** a full-train PASS. The full CBS v1.7 release train was not
   available.
 - This release does not include a tag or a GitHub Release until the human
