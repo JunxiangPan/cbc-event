@@ -1,0 +1,6 @@
+CBP_CONFIG_WARN: schema_version missing; assuming legacy 0.1.0 and auto-migrating in memory
+D:\qqÀ’Ë™—‘¥Û∑ ”„\tmp-cbp-rc-lib\cbp\cli.py:334: DeprecationWarning: schema_version missing; assuming legacy 0.1.0 and auto-migrating in memory
+  cfg = load_config(Path(args.root), config_path, overrides)
+CBP_CONFIG_WARN: config schema 0.1.0 was migrated to 1.0.8 in memory; update the checked-in file
+D:\qqÀ’Ë™—‘¥Û∑ ”„\tmp-cbp-rc-lib\cbp\cli.py:334: DeprecationWarning: config schema 0.1.0 was migrated to 1.0.8 in memory; update the checked-in file
+  cfg = load_config(Path(args.root), config_path, overrides)

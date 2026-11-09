@@ -1,0 +1,6 @@
+test_f05_cbs_body_generator_needs_no_change (tests.e2e.test_f6.F6Tests) ... skipped 'CBS read-only checkout is not available'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK (skipped=1)

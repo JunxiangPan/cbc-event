@@ -1,0 +1,12 @@
+claims: SKIPPED (not configured)
+binary: SKIPPED (not configured)
+encoding: PASS encoding=38 UTF-8 files without BOM
+docs: SKIPPED (not configured)
+custom: SKIPPED (not configured)
+coverage: SKIPPED (not configured)
+dependency: SKIPPED (not configured)
+comments: SKIPPED (not configured)
+upgrade: SKIPPED (not configured)
+CBP_RESULT=PASS gates_ran=1 skipped=8
+CBP_GATE_STATUS=PASS CBP_EXIT_CODE=0 CBP_APPLICABLE=1 CBP_SKIP_RATIO=0.000000 CBP_BLOCKING_SKIP=false
+CBP_MODE=audit contract_exit_code=0 publishable=true

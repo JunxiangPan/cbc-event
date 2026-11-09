@@ -1,0 +1,8 @@
+test_s17_missing_body_hash_scope_is_2_fail_not_precondition (tests.e2e.test_exit_contract.ExitContractTests) ... ok
+test_s18_full_body_hash_scope_is_2_unsupported (tests.e2e.test_exit_contract.ExitContractTests) ... ok
+test_f03_expect_uploaded_without_remote_is_2 (tests.e2e.test_f6.F6Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.123s
+
+OK
