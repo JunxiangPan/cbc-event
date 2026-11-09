@@ -10,7 +10,7 @@ It verifies the `cbc-chain/v1` hash chain, renders the sealed-v1 body, and
 exposes three viewer error paths. It does not upload, publish, or modify a
 release.
 
-## Changes in this candidate
+## Changes in this release
 
 - Accepts the contract v1.7.1 RC2 CBP quality-manifest shape:
   - `schema_version` is the string `"1"`;
@@ -25,7 +25,7 @@ release.
   three viewer error paths (`verify`, `show`, `render-body`).
 - `cbc_event` protocol semantics are unchanged from 0.1.0.
 
-## Test evidence for this candidate
+## Test evidence
 
 - CBP 1.2.2 official manifest: `e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50`
 - R02–R19: **18/18 assertions passed** (R16 Windows SKIP, Linux CI covers)
@@ -33,7 +33,7 @@ release.
   after the pre-release rc.2 PASS; local test index is separate and is not a
   GitHub PASS
 - F05: train-like with real CBS source **OK**; full CBS v1.7 train **NOT RUN**
-- CI: Ubuntu + Windows green on the candidate commit.
+- CI: Ubuntu + Windows green on the release commit.
 
 ## Artifacts
 

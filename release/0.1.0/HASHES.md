@@ -13,7 +13,7 @@
 | CBP sdist | `91974398ea0bc850633919e287f546d48b53f08d0ca57befce3a4a091de092d5` |
 | CBP release manifest | `228594d07d7a9906280e7b5ff12fa0b1bf70b22ffff4b3d25983a4bcc072a2c6` |
 
-The candidate artifacts were rebuilt from the current HEAD after the RC2
+The release artifacts were rebuilt from the current HEAD after the RC2
 validator change; the older `48d9762` artifacts are superseded.
 
 ## CBC artifacts

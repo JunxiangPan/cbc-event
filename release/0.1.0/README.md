@@ -8,11 +8,11 @@ This directory is the 0.1.0 release package. The official tag is `v0.1.0` at
 
 | File | Purpose |
 |---|---|
-| `RELEASE_NOTES.md` | candidate release notes and artifact hashes |
+| `RELEASE_NOTES.md` | release notes and artifact hashes |
 | `HASHES.md` | source, artifacts, manifest, CBE/chain provenance |
 | `R01_DECISION.md` | strategy B: pre-release R01, then official 0.1.0 |
 | `RELEASE_CHECKLIST.md` | approval, pre-release, R01, official release |
-| `quality-manifest.json` | CBP 1.2.2 RC2 manifest used by this candidate |
+| `quality-manifest.json` | CBP 1.2.2 RC2 manifest used by this release |
 | `RELEASE_BODY.md` | body used for the manifest/body hash |
 
 ## Current gate status
