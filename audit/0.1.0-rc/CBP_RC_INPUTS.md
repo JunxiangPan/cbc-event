@@ -134,6 +134,13 @@ release_body_hash=146d277a1e2f44bc0daccc55888eb8e904caae67ad04a9619ff100e4902845
 
 Raw: `raw/cbp-manifest-official.stdout`, `raw/cbp-manifest-official.json`.
 
+The CBP official evidence also contains an earlier CBC manifest
+`9f1cc14c26901ab9f928f45a5d22a60946a763c89c18ea8ed0c54794d75e64c7`; its
+`release_body_hash` preimage (`5521546f…`) was not retained. This run therefore
+regenerated `32462de2…` from the retained official body and official artifacts
+with the official CBP 1.2.0 tool. Both are official-tool manifests; the
+executable chain uses 32462de2 because its body preimage is available.
+
 Superseded RC evidence: `01438d31…` and `5f952d9b…` are **not used** by the
 executable R02–R19 run. The earlier `f897bc90…` artifacts were not retained and
 remain historical only.

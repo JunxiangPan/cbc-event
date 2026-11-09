@@ -35,7 +35,9 @@ inputs. CBP 855fed7 was used to regenerate the retained manifest `5f952d9b…`
 from the same source; the regenerated manifest is byte-identical on re-run.
 `f897` is preserved as historical evidence in `CBP_RC_INPUTS.md`; the old RC
 manifests `01438d31…` and `5f952d9b…` are superseded by the official manifest
-`32462de2…`.
+`32462de2…`. CBP evidence also carries `9f1cc14c…`; its body preimage
+`5521546f…` was not retained, so this run regenerated `32462de2…` from the
+retained official body/artifacts with the official tool.
 
 ## Results
 
