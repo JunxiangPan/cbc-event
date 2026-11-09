@@ -4,18 +4,18 @@
 
 ## 0. Human approval
 
-- [ ] Human approves the 0.1.0 candidate and the R01 strategy (B).
-- [ ] Human approves creating the pre-release `v0.1.0-rc.1`.
+- [x] Human approved the 0.1.0 candidate and the R01 strategy (B).
+- [x] Human approved creating a pre-release.
 - [ ] Human approves the final `v0.1.0` release after R01 passes.
 
 No tag/release action is performed before the corresponding approval.
 
 ## 1. Candidate inputs
 
-- Source commit: `49f85b03377b63bf1b4ea2917282d7d71b14b120`
-- wheel: sha256 `25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59`
-- sdist: sha256 `ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59`
-- manifest: sha256 `a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c`
+- Source commit: `5cdc9a1b0d9a06f7bb6d5ad87f5a736fa24c8439`
+- wheel: sha256 `d77648af4f7bf6c1d67e57ee5d07a5d6a116b92aecdf89df289b7b73189d3f33`
+- sdist: sha256 `024c54b6e417d428910c74bfb4e46fa6237b01ae7f95c58c1df7779f24307e17`
+- manifest: sha256 `e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50`
 - CBP producer: 1.2.2 official; contract v1.7.1 RC2.
 
 - [ ] Reconfirm artifacts are the ones from the release commit (no rebuild).
@@ -24,9 +24,9 @@ No tag/release action is performed before the corresponding approval.
 
 ## 2. Pre-release test release
 
-- [ ] Create a **GitHub pre-release** `v0.1.0-rc.1` at the source commit.
-- [ ] Upload the exact wheel and sdist above.
-- [ ] Upload the release body that matches `release_body_hash`.
+- [x] Create a **GitHub pre-release** `v0.1.0-rc.2` at the source commit.
+- [x] Upload the exact wheel and sdist above.
+- [x] Upload the release body that matches `release_body_hash`.
 - [ ] Do **not** upload the test release to PyPI.
 - [ ] Do **not** move or reuse `v0.1.0`.
 
@@ -34,7 +34,7 @@ No tag/release action is performed before the corresponding approval.
 
 ```bash
 cbc-viewer verify --release-dir <dir> \
-  --remote JunxiangPan/cbc-event --tag v0.1.0-rc.1 --expect-uploaded
+  --remote JunxiangPan/cbc-event --tag v0.1.0-rc.2 --expect-uploaded
 ```
 
 PASS requires all of:
@@ -54,18 +54,18 @@ If R01 fails: do not create `v0.1.0`; fix and repeat with a new pre-release tag.
 
 Preconditions:
 
-- [ ] Real GitHub R01 for `v0.1.0-rc.1` passed.
-- [ ] R02–R19 18/18 still tied to the same hashes.
+- [x] Real GitHub R01 for `v0.1.0-rc.2` passed.
+- [x] R02–R19 18/18 still tied to the same hashes.
 - [ ] Human approval for the official release.
-- [ ] F05 boundary is disclosed; full CBS v1.7 train is not claimed.
+- [x] F05 boundary is disclosed; full CBS v1.7 train is not claimed.
 
 Actions:
 
 - [ ] Create `v0.1.0` at the same source commit.
 - [ ] Upload the **same bytes** (no rebuild, no rehash).
 - [ ] Mark `v0.1.0` as the official release.
-- [ ] Keep `v0.1.0-rc.1` as a pre-release audit trail (or delete it only under
-      the approved release policy; never retag it).
+- [ ] Keep `v0.1.0-rc.1` and `v0.1.0-rc.2` as pre-release audit trails (or
+      delete them only under the approved release policy; never retag them).
 
 ## 5. Post-release (not a substitute for pre-release R01)
 

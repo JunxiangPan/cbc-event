@@ -17,31 +17,31 @@ a new version/ERRATUM. That is the wrong order for a release gate.
 ### Chosen: B (pre-release test release)
 
 1. After human approval, create a **pre-release** GitHub release:
-   - tag: `v0.1.0-rc.1` (pre-release, **not** `v0.1.0`);
-   - target commit: `49f85b03377b63bf1b4ea2917282d7d71b14b120`;
+   - tag: `v0.1.0-rc.2` (pre-release, **not** `v0.1.0`);
+   - target commit: `5cdc9a1b0d9a06f7bb6d5ad87f5a736fa24c8439`;
    - assets: the exact wheel/sdist below, plus the release body;
    - no PyPI upload for the test release.
 2. Run the real GitHub R01 against it:
    ```bash
    cbc-viewer verify --release-dir <dir> \
-     --remote JunxiangPan/cbc-event --tag v0.1.0-rc.1 --expect-uploaded
+     --remote JunxiangPan/cbc-event --tag v0.1.0-rc.2 --expect-uploaded
    ```
 3. Only if that returns exit 0, `gate_status=PASS`, `upload_status=UPLOADED`,
    and chain PASS, create the official release:
    - tag `v0.1.0` at the same commit;
    - upload the **same bytes** (no rebuild);
    - mark `v0.1.0` as the official release.
-4. Keep `v0.1.0-rc.1` as a pre-release audit trail (or delete it under the
-   human-approved release policy); never move it to `v0.1.0`.
+4. Keep `v0.1.0-rc.1` and `v0.1.0-rc.2` as pre-release audit trails (or delete
+   them under the human-approved release policy); never move either to `v0.1.0`.
 
 ### R01 status now
 
 | Item | Status |
 |---|---|
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **NOT RUN** |
+| R01 real GitHub | **PASS** on `v0.1.0-rc.2` |
 | Official 0.1.0 tag | **NOT CREATED** |
-| Test release | **NOT CREATED** |
+| Test release | `v0.1.0-rc.1` retained; `v0.1.0-rc.2` passed |
 
 ## What must not be written
 
@@ -53,10 +53,10 @@ a new version/ERRATUM. That is the wrong order for a release gate.
 
 ```text
 human approval
-  -> pre-release v0.1.0-rc.1
-  -> real GitHub R01 (expect exit 0 + UPLOADED)
+  -> pre-release v0.1.0-rc.2
+  -> real GitHub R01 (exit 0 + UPLOADED)
   -> official v0.1.0 (same bytes)
   -> post-release verification / PyPI decision (separate)
 ```
 
-No tag or release is created by this document.
+`v0.1.0-rc.1` and `v0.1.0-rc.2` are pre-releases; official `v0.1.0` is not created.

@@ -1,24 +1,24 @@
 {
   "scope": "local test index, not GitHub",
-  "manifest_sha256": "a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c",
-  "body_sha256": "e30c24b348f6aaec28b5d5baa23afd3da73e580c026d3d881be51d12bbbab556",
+  "manifest_sha256": "e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50",
+  "body_sha256": "5da5214442399f0a2857ffc2cdcccac2e56db31466aab02338a0e52ee9fe17ff",
   "assets": [
     {
       "name": "cbc_event-0.1.0-py3-none-any.whl",
-      "size": 36713,
-      "digest": "sha256:25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59"
+      "size": 37111,
+      "digest": "sha256:d77648af4f7bf6c1d67e57ee5d07a5d6a116b92aecdf89df289b7b73189d3f33"
     },
     {
       "name": "cbc_event-0.1.0.tar.gz",
-      "size": 35913,
-      "digest": "sha256:ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59"
+      "size": 36295,
+      "digest": "sha256:024c54b6e417d428910c74bfb4e46fa6237b01ae7f95c58c1df7779f24307e17"
     }
   ],
   "exit_code": 0,
   "gate_status": "PASS",
   "cbc_chain_status": "PASS",
   "upload_status": "UPLOADED",
-  "root_hash": "sha256:95d104b5f99cabae5adc7dfd8dad6fda8be8a7a93faaf75fac8162901645688c",
+  "root_hash": "sha256:bfc29f6676171615bb15be34968b6c01f4324128d00984ac89c973519ab60e87",
   "link_count": 7,
   "asset_link_count": 2,
   "anchor_scope": "remote"

@@ -21,5 +21,18 @@ Assembled from CBC 11943f14 for the CBP external-manifest E2E.
 Not an official GitHub Release body; upload status is NOT_UPLOADED.
 
 <!-- CBC-EVIDENCE-BEGIN -->
-placeholder
+<!-- cbc-evidence {"schema":"cbc-body-anchor/v1","root_hash":"sha256:bfc29f6676171615bb15be34968b6c01f4324128d00984ac89c973519ab60e87","link_count":7,"asset_link_count":2,"verified_link_count":7,"appendix_sha256":"sha256:683f96e0f15ca293b6c58ded5c76663a87d4034cc8aaa1e4c01679e755decd82"} -->
+## CBC evidence chain
+
+- gate_status: **NOT_UPLOADED**
+- cbc_chain_status: **PASS** (file integrity only; this is NOT a release PASS)
+- root_hash: `sha256:bfc29f6676171615bb15be34968b6c01f4324128d00984ac89c973519ab60e87`
+- link_count: 7
+- asset_link_count: 2
+- broken_link: none
+- upload_status: **NOT_UPLOADED**
+- upload_blocked_reason: `not_uploaded`
+- declared_attached: true
+- declared as attached but not uploaded
+- skip_accounting: CBC is not counted in the CBE/CBP SKIP ratio
 <!-- CBC-EVIDENCE-END -->

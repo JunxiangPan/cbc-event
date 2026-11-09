@@ -1,1 +1,1 @@
-MANIFEST_WRITTEN path=tmp-cbc-122-release-manifest/quality-manifest.json sha256=a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c package_id=cbc producer_id=cbp gate_status=PASS
+MANIFEST_WRITTEN path=tmp-cbc-122-release-manifest2/quality-manifest.json sha256=e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50 package_id=cbc producer_id=cbp gate_status=PASS

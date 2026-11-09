@@ -242,6 +242,7 @@ def main() -> int:
                 "32462de20fcf180a4e7e5edae901743311272d84a78f7f22ef99fa2eb03033bb",
                 "9f1cc14c26901ab9f928f45a5d22a60946a763c89c18ea8ed0c54794d75e64c7",
                 "81611397bed8aa927718d9900cb509ad6eeb966aed99227e7a85c69e7c1fcede",
+                "a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c",
             ],
             "historical_manifest_sha256": "f897bc905d4cebfa82cc83f137440cb0a024e0dd060eaa022bca1fb7a3942724",
             "artifact_hashes": {
@@ -253,7 +254,7 @@ def main() -> int:
             "base_root_hash": json.loads(base["chain"].read_text(encoding="utf-8"))["root_hash"],
             "base_link_count": json.loads(base["chain"].read_text(encoding="utf-8"))["link_count"],
             "base_asset_link_count": json.loads(base["chain"].read_text(encoding="utf-8"))["asset_link_count"],
-            "r01": "NOT RUN — no uploaded CBC release; upload forbidden by this task",
+            "r01": "REAL GitHub PASS on v0.1.0-rc.2; official v0.1.0 not created",
             "cases": results,
             "passed": sum(1 for item in results if item["pass"]),
             "total": len(results) + 1,

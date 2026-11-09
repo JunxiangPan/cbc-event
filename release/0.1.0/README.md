@@ -1,6 +1,6 @@
 # CBC 0.1.0 release package — candidate
 
-**Status: PARTIAL / NOT RELEASED. No tag, no GitHub Release, no PyPI upload.**
+**Status: PRE-RELEASE `v0.1.0-rc.2` PASSED R01; official `v0.1.0` NOT CREATED.**
 
 This directory is the prepared 0.1.0 release package. It is intentionally not
 tagged. Human approval is required before the pre-release and before the
@@ -22,7 +22,7 @@ official release.
 | R02–R19 | 18/18 assertions |
 | R16 | Windows SKIP; Linux CI covers |
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **NOT RUN** |
+| R01 real GitHub | **PASS** on pre-release `v0.1.0-rc.2` |
 | F05 train-like | OK |
 | F05 full CBS train | **NOT RUN** |
 | CI | Ubuntu + Windows green |
@@ -30,14 +30,15 @@ official release.
 ## R01 decision
 
 **B — pre-release test release first, then official 0.1.0.** R01 is a
-pre-release acceptance gate. Local R01 is never written as GitHub R01 PASS.
+pre-release acceptance gate; the real pre-release run passed. Local R01 is
+never written as GitHub R01 PASS. Official `v0.1.0` is not created yet.
 
 ## Source and artifacts
 
-- source: `49f85b03377b63bf1b4ea2917282d7d71b14b120`
-- wheel: `25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59`
-- sdist: `ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59`
-- manifest: `a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c`
+- source: `5cdc9a1b0d9a06f7bb6d5ad87f5a736fa24c8439`
+- wheel: `d77648af4f7bf6c1d67e57ee5d07a5d6a116b92aecdf89df289b7b73189d3f33`
+- sdist: `024c54b6e417d428910c74bfb4e46fa6237b01ae7f95c58c1df7779f24307e17`
+- manifest: `e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50`
 
 ## Boundaries
 

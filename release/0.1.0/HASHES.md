@@ -6,7 +6,7 @@
 
 | Item | Value |
 |---|---|
-| CBC source commit | `49f85b03377b63bf1b4ea2917282d7d71b14b120` |
+| CBC source commit | `5cdc9a1b0d9a06f7bb6d5ad87f5a736fa24c8439` |
 | Contract | v1.7.1 RC2, file sha256 `209d75b4c900f9a2d1ad8f5c377ac1b8a868cf3e4cd449970e61e3ff380c18f1` |
 | CBP manifest producer | CBP 1.2.2 official (`cbp manifest`) |
 | CBP wheel | `2b73b4a4c387e4eb0700a339235249d62accfbe0a14c505188c53c484df7d046` |
@@ -20,9 +20,9 @@ validator change; the older `48d9762` artifacts are superseded.
 
 | Item | SHA256 |
 |---|---|
-| `cbc_event-0.1.0-py3-none-any.whl` | `25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59` |
-| `cbc_event-0.1.0.tar.gz` | `ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59` |
-| `quality-manifest.json` | `a64555beb323099ff3810f23f5f45f09276233aa72c83866c806ae0513491b4c` |
+| `cbc_event-0.1.0-py3-none-any.whl` | `d77648af4f7bf6c1d67e57ee5d07a5d6a116b92aecdf89df289b7b73189d3f33` |
+| `cbc_event-0.1.0.tar.gz` | `024c54b6e417d428910c74bfb4e46fa6237b01ae7f95c58c1df7779f24307e17` |
+| `quality-manifest.json` | `e16823ce2c3b5ccbede74358742948b310b706c8a05d123420ea2aab89858d50` |
 
 ## Evidence binding
 
@@ -36,7 +36,7 @@ validator change; the older `48d9762` artifacts are superseded.
 | `artifact_repository` | `JunxiangPan/cbc-event` / `local-cbc-build-once` / `cbc-build-once` |
 | CBE report | `721f529b6a9f7b7126a492808d2056d1ba1794d246640d96335ef434ebee0b1d` |
 | CBP gate report | `213e824392879ce539c6664725d5cd919b7f1d471de8d91b9f75d2557279e78b` |
-| chain root | `sha256:95d104b5f99cabae5adc7dfd8dad6fda8be8a7a93faaf75fac8162901645688c` |
+| chain root | `sha256:bfc29f6676171615bb15be34968b6c01f4324128d00984ac89c973519ab60e87` |
 | `link_count` / `asset_link_count` | `7` / `2` |
 
 The CBE report and CBP gate report are the retained official v0.1.0
@@ -56,9 +56,10 @@ release if the release policy requires remote coordinate verification.
 | R02–R19 | 18/18 assertions passed |
 | R16 | Windows SKIP; Linux CI covers |
 | R01 local test index | PASS (not GitHub) |
-| R01 real GitHub | **NOT RUN** |
+| R01 real GitHub | **PASS** on pre-release `v0.1.0-rc.2` |
 | F05 train-like | OK |
 | F05 full CBS v1.7 train | **NOT RUN** |
 
-R01 and F05 are **not** full PASS in the release sense. See
-`R01_DECISION.md` and `RELEASE_CHECKLIST.md`.
+R01 passed on the pre-release; the official `v0.1.0` is still not created. F05
+is **not** a full-train PASS. See `R01_DECISION.md` and
+`RELEASE_CHECKLIST.md`.

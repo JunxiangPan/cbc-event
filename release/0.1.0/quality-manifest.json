@@ -1,8 +1,8 @@
 {
   "applicable_gate_count": 1,
   "artifact_hashes": {
-    "cbc_event-0.1.0-py3-none-any.whl": "25d5730152a50ee064be1f380ce0ce1f96290924c221f7b268feafa719990f59",
-    "cbc_event-0.1.0.tar.gz": "ed6e8b1a0d5e471ea51fa9534c6b93129ef9b857a534c212e56af43677fc0c59"
+    "cbc_event-0.1.0-py3-none-any.whl": "d77648af4f7bf6c1d67e57ee5d07a5d6a116b92aecdf89df289b7b73189d3f33",
+    "cbc_event-0.1.0.tar.gz": "024c54b6e417d428910c74bfb4e46fa6237b01ae7f95c58c1df7779f24307e17"
   },
   "artifact_repository": {
     "artifact_name": "cbc-build-once",
@@ -11,9 +11,9 @@
   },
   "blocking_skip": false,
   "body_hash_scope": "base",
-  "ci_commit_sha": "49f85b03377b63bf1b4ea2917282d7d71b14b120",
+  "ci_commit_sha": "5cdc9a1b0d9a06f7bb6d5ad87f5a736fa24c8439",
   "ci_run_id": "local-audit-20261109",
-  "evidence_sha256": "a556f89212291347e0d735619dcf2a68f5de4ba3e70a920fbea954a9e4cb2061",
+  "evidence_sha256": "f5fefd2a2f07a965097b6634101b330bd655283026aeee4bb8bdee151d49758f",
   "gate_status": "PASS",
   "gates": [
     {
