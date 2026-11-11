@@ -2,6 +2,10 @@
 
 ## 0.2.0rc2 — unreleased candidate
 
+- Added Phase 0 CBF adoption status (`PENDING_CBF_0.1.0`), reserved a manual
+  fail-closed `cbf-privacy-gate` workflow, and documented that the CBF adapter
+  is not a CBF PASS.
+
 - Added the optional, dependency-free `cbf-evidence/v1` adapter: normalized
   CBC view and pure conversion to a cbc-event/v2 event; no CBF import or
   runtime dependency.

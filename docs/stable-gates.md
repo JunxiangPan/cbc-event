@@ -17,10 +17,11 @@ release until **all** gates pass.
 1. 0.1.x regression suite green on the release commit.
 2. rc candidate installs in a clean environment and reads v1/v2/mixed event logs.
 3. CBF adapter reads a real `cbf-evidence/v1` document without importing CBF.
-4. F05 runs on the real CBS v1.7 release train with real CBE/CBP/CBC/CBM
+4. CBF Phase 1/2 gate runs and yields a real `cbf-evidence/v1` PASS.
+5. F05 runs on the real CBS v1.7 release train with real CBE/CBP/CBC/CBM
    products; record run URL, inputs, and outputs. Mock or train-like output does
    not count.
-5. Human approval for the stable release.
+6. Human approval for the stable release.
 
 ## Explicitly not enough
 
@@ -30,6 +31,8 @@ release until **all** gates pass.
 - external adoption statements without evidence.
 
 ## Current blockers
+
+- CBF is not released; CBF gate is PENDING, not PASS.
 
 - F05 full train is blocked by the absence of an executable CBS v1.7
   release-train workflow in this environment (see

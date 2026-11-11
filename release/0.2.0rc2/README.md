@@ -36,6 +36,12 @@ candidate and requires review/approval before any tag.
 Evidence: `docs/standalone-install.md`, `docs/cbf-adapter.md`,
 `docs/f05-train-evidence.md`.
 
+## CBF status
+
+CBF is **PENDING_CBF_0.1.0**. The adapter reads `cbf-evidence/v1`, but it is
+**not** a CBF gate and creates no CBF PASS. Phase 0 is documented in
+`docs/CBF_ADOPTION.md`.
+
 ## Boundaries
 
 - Not a stable 0.2.0.
