@@ -11,6 +11,7 @@ from cbc_event import GENESIS, CbfEvidence, CbfEvidenceError, load_cbf_evidence
 from cbc_event.canonical import canonical_bytes
 from cbc_event.schema import validate_event
 from cbc_event.store import compute_event_hash
+from cbc_viewer.cli import main as cli_main
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests" / "fixtures" / "cbf-evidence-pass.json"
@@ -96,6 +97,31 @@ class CbfAdapterTests(unittest.TestCase):
         self.assertEqual(event["event_hash"], compute_event_hash(GENESIS, event))
         self.assertTrue(event["evidence_hash"].startswith("sha256:"))
 
+    def test_cli_findings_text(self) -> None:
+        import hashlib
+        from cbc_event.canonical import canonical_bytes
+        doc = _doc(result="BLOCK")
+        doc["findings"] = [{
+            "rule_id": "aws-access-key", "category": "SECRET", "severity": "HIGH",
+            "path": "config.py", "line": 12, "excerpt": "AKIA****",
+        }]
+        doc["evidence_sha256"] = hashlib.sha256(
+            canonical_bytes({k: v for k, v in doc.items() if k != "evidence_sha256"})
+        ).hexdigest()
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "evidence.json"
+            path.write_text(json.dumps(doc), encoding="utf-8")
+            from io import StringIO
+            import contextlib
+            out = StringIO()
+            with contextlib.redirect_stdout(out):
+                code = cli_main(["cbf-evidence", "--evidence", str(path)])
+            self.assertEqual(code, 0)
+            text = out.getvalue()
+            self.assertIn("CBF evidence: BLOCK", text)
+            self.assertIn("[HIGH] SECRET aws-access-key: config.py:12", text)
+            self.assertIn("AKIA****", text)
+
     def test_cli_view(self) -> None:
         from cbc_viewer import cli
         from io import StringIO
@@ -104,6 +130,15 @@ class CbfAdapterTests(unittest.TestCase):
         out = StringIO()
         with contextlib.redirect_stdout(out):
             code = cli.main(["cbf-evidence", "--evidence", str(FIXTURE)])
+        self.assertEqual(code, 0)
+        text = out.getvalue()
+        self.assertIn("CBF evidence: PASS", text)
+        self.assertIn("policy_sha256:", text)
+        self.assertIn("findings: 0", text)
+
+        out = StringIO()
+        with contextlib.redirect_stdout(out):
+            code = cli.main(["cbf-evidence", "--evidence", str(FIXTURE), "--json"])
         self.assertEqual(code, 0)
         data = json.loads(out.getvalue())
         self.assertEqual(data["source_schema"], "cbf-evidence/v1")

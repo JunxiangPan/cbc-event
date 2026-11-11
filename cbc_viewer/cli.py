@@ -43,6 +43,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     cbf = sub.add_parser("cbf-evidence", help="read cbf-evidence/v1 and emit a CBC view/event")
     cbf.add_argument("--evidence", required=True)
+    cbf.add_argument("--json", action="store_true", help="print the full normalized view as JSON")
     cbf.add_argument("--event", action="store_true", help="convert to a cbc-event/v2 event")
     cbf.add_argument("--chain-id")
     cbf.add_argument("--seq", type=int)
@@ -145,6 +146,33 @@ def _run_show(args: argparse.Namespace) -> int:
     return 0
 
 
+def _format_cbf(evidence: object) -> str:
+    lines = [
+        f"CBF evidence: {evidence.result}",
+        f"project: {evidence.project}",
+        f"surface: {evidence.surface}",
+        f"policy_version: {evidence.policy_version}",
+        f"policy_sha256: {evidence.policy_sha256}",
+        f"policy_effective_sha256: {evidence.policy_effective_sha256}",
+        f"evidence_sha256: {evidence.evidence_sha256} ({evidence.hash_status})",
+        f"findings: {len(evidence.findings)}",
+    ]
+    for finding in evidence.findings:
+        severity = finding.get("severity", "UNKNOWN")
+        category = finding.get("category", "UNKNOWN")
+        rule = finding.get("rule_id", "unknown")
+        path = finding.get("path", "unknown")
+        line = finding.get("line", "?")
+        lines.append(f"- [{severity}] {category} {rule}: {path}:{line}")
+        excerpt = finding.get("excerpt")
+        if excerpt:
+            lines.append(f"  {excerpt}")
+    scanned = evidence.scanned
+    if scanned:
+        lines.append("scanned: " + ", ".join(f"{key}={value}" for key, value in sorted(scanned.items())))
+    return "\n".join(lines)
+
+
 def _run_cbf(args: argparse.Namespace) -> int:
     from cbc_event.cbf import CbfEvidence
 
@@ -152,7 +180,10 @@ def _run_cbf(args: argparse.Namespace) -> int:
     if evidence.hash_status == "mismatch":
         raise InputError("CBF evidence hash mismatch")
     if not args.event:
-        print(json.dumps(evidence.view(), ensure_ascii=False, indent=2))
+        if args.json:
+            print(json.dumps(evidence.view(), ensure_ascii=False, indent=2))
+        else:
+            print(_format_cbf(evidence))
         return 0
     if not args.chain_id or args.seq is None:
         raise InputError("--event requires --chain-id and --seq")

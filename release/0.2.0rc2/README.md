@@ -9,8 +9,8 @@ candidate and requires review/approval before any tag.
 
 | Artifact | SHA256 |
 |---|---|
-| `cbc_event-0.2.0rc2-py3-none-any.whl` | `de7b45949e254085dd66d8335e782f99b88f643d339a6dc51d4aff20371517c1` |
-| `cbc_event-0.2.0rc2.tar.gz` | `75b9a89859faba34f2ae1e4df21c867371982baac358100596e1f3ec4aeecddb` |
+| `cbc_event-0.2.0rc2-py3-none-any.whl` | `a96e26713014dafaae20b48c1f1890c0d7b7bbf11829fd2a5ebb9880286b3c0e` |
+| `cbc_event-0.2.0rc2.tar.gz` | `cd674028272b374dfa44fa69b5806c206ace257d815c90bcf98c1d2ba9799129` |
 
 ## Changes from rc1
 
@@ -19,7 +19,7 @@ candidate and requires review/approval before any tag.
   - pure conversion to `cbc-event/v2`;
   - no CBF import and no runtime dependency;
   - documented CBF 0.1.0 `summary`-after-sealing hash status.
-- 168 tests; protocol coverage 93%; viewer coverage 90%.
+- 169 tests; protocol coverage 93%; viewer coverage 90%.
 
 ## Verification
 
@@ -27,7 +27,7 @@ candidate and requires review/approval before any tag.
 |---|---|
 | rc1 regression + v2 tests | pass |
 | CBF real fixture read | pass (`verified_without_summary`) |
-| CBF CLI view/event | pass |
+| CBF CLI text/JSON view/event | pass |
 | clean-env rc2 wheel install | pass |
 | 0.1.0 compatibility | pass |
 | F05 full train | **NOT RUN / blocked** |
