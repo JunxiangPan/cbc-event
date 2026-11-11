@@ -14,8 +14,8 @@ it and does not require it to be installed.
 ## Phase 0 (current)
 
 - Adoption documented here.
-- The `cbf-privacy-gate` CI job name is reserved in this document only; no
-  workflow file is added in Phase 0.
+- The `cbf-privacy-gate` CI job name is reserved with a manual-only,
+  fail-closed placeholder workflow; it exits 1 and produces no PASS.
 - Existing CI does not fake a CBF result and does not use `continue-on-error`
   or `if: false` to bypass it.
 - No GitHub Release, PyPI upload, or git push is claimed to have CBF evidence.
