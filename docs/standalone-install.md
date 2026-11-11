@@ -6,8 +6,8 @@ Candidate: `cbc-event` / `cbc_viewer` **0.2.0rc1**. Not uploaded to PyPI.
 
 | Artifact | SHA256 |
 |---|---|
-| `cbc_event-0.2.0rc1-py3-none-any.whl` | `51725ce09dd7297be6c1f2dea095790cc5b3752110372c70b590e39559bcda97` |
-| `cbc_event-0.2.0rc1.tar.gz` | `8c4198ce40198bf83ea389eef2946f0b7ec2cfeeb6e0517be2ffa43e1f372f16` |
+| `cbc_event-0.2.0rc1-py3-none-any.whl` | `ed74cb941819cd3cdb6dd4ae656f5ee9c4ba20f36b40679038543bdaf4d13d31` |
+| `cbc_event-0.2.0rc1.tar.gz` | `17b140d0eee4d808ab776b665dc1ac7e6ecc64368f2b767b6e07546b4b34a001` |
 
 The wheel is one distribution containing `cbc_event` and `cbc_viewer`; the
 viewer has no third-party runtime dependency and does not import CBE/CBP/CBM.
