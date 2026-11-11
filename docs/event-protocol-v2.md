@@ -1,4 +1,4 @@
-# cbc-event protocol v2 (0.2.0rc1)
+# cbc-event protocol v2 (0.2.0rc2)
 
 Status: **release candidate, opt-in**. `cbc-event/v1` remains supported and is
 still the default emit format in this release.

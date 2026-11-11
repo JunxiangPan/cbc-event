@@ -1,11 +1,11 @@
 # Compatibility matrix
 
-Status: `cbc-event` / `cbc_viewer` **0.2.0rc1**; `0.1.0` remains the stable
+Status: `cbc-event` / `cbc_viewer` **0.2.0rc2**; `0.1.0` remains the stable
 release. No stable 0.2.0 is declared.
 
 ## Event readers
 
-| Input | 0.1.x reader | 0.2.0rc1 reader | Behavior |
+| Input | 0.1.x reader | 0.2.0rc2 reader | Behavior |
 |---|---|---|---|
 | `cbc-event/v1` event | PASS | PASS | v1 remains frozen |
 | `cbc-event/v2` event | fail-closed | PASS | unknown fields are warnings, schema is negotiated |
@@ -21,13 +21,13 @@ release. No stable 0.2.0 is declared.
 | Producer API | Default schema | Opt-in | Notes |
 |---|---|---|---|
 | `EventStore` 0.1.x | v1 | n/a | unchanged |
-| `EventStore` 0.2.0rc1 | v1 | `protocol_version="v2"` | requires `identity`, `chain_id`, `event_type` |
-| `Client` 0.2.0rc1 | v1 | v2 kwargs | disabled by default |
-| `emit()` 0.2.0rc1 | v1 | v2 kwargs | disabled unless enabled |
+| `EventStore` 0.2.0rc2 | v1 | `protocol_version="v2"` | requires `identity`, `chain_id`, `event_type` |
+| `Client` 0.2.0rc2 | v1 | v2 kwargs | disabled by default |
+| `emit()` 0.2.0rc2 | v1 | v2 kwargs | disabled unless enabled |
 
 ## Viewer scopes
 
-| Scope | 0.2.0rc1 |
+| Scope | 0.2.0rc2 |
 |---|---|
 | release chain | unchanged from 0.1.0 (sealed-v1) |
 | event log v1 | PASS |
@@ -45,6 +45,7 @@ release. No stable 0.2.0 is declared.
 | CBM installed | not required |
 | CBS installed | not required for event/release reading |
 | CBE/CBP/CBM imports in `cbc_event`/`cbc_viewer` | none |
+| optional CBF adapter | `cbf-evidence/v1` JSON only; no CBF import |
 | third-party runtime dependency | none |
 | network listener | none |
 
@@ -57,6 +58,6 @@ inputs, outputs, and remaining blocker.
 ## Version policy
 
 - `0.1.x` consumers continue to work.
-- `0.2.0rc1` is opt-in.
+- `0.2.0rc2` is opt-in.
 - `v1` events are never silently rewritten.
 - `v1` removal is not part of 0.2.x.

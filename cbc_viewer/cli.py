@@ -11,7 +11,7 @@ from .body import BodyProblem, render_appendix, render_not_uploaded_entry
 from .errors import InputError
 from .verify import VerificationResult, verify_event_log_report, verify_release
 
-VERSION = "0.2.0rc1"
+VERSION = "0.2.0rc2"
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -40,6 +40,13 @@ def _build_parser() -> argparse.ArgumentParser:
     show = sub.add_parser("show", help="print a saved report")
     show.add_argument("--report", required=True)
     show.add_argument("--json", action="store_true")
+
+    cbf = sub.add_parser("cbf-evidence", help="read cbf-evidence/v1 and emit a CBC view/event")
+    cbf.add_argument("--evidence", required=True)
+    cbf.add_argument("--event", action="store_true", help="convert to a cbc-event/v2 event")
+    cbf.add_argument("--chain-id")
+    cbf.add_argument("--seq", type=int)
+    cbf.add_argument("--prev-hash", default="sha256:" + "0" * 64)
 
     render = sub.add_parser("render-body", help="render the CBC body block")
     render.add_argument("--report", required=True)
@@ -138,6 +145,26 @@ def _run_show(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_cbf(args: argparse.Namespace) -> int:
+    from cbc_event.cbf import CbfEvidence
+
+    evidence = CbfEvidence.load(args.evidence)
+    if evidence.hash_status == "mismatch":
+        raise InputError("CBF evidence hash mismatch")
+    if not args.event:
+        print(json.dumps(evidence.view(), ensure_ascii=False, indent=2))
+        return 0
+    if not args.chain_id or args.seq is None:
+        raise InputError("--event requires --chain-id and --seq")
+    event = evidence.to_cbc_event(
+        chain_id=args.chain_id,
+        seq=args.seq,
+        prev_hash=args.prev_hash,
+    )
+    print(json.dumps(event, ensure_ascii=False, indent=2))
+    return 0
+
+
 def _run_render(args: argparse.Namespace) -> int:
     report = _load_report(args.report)
     if args.format == "appendix":
@@ -156,6 +183,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_verify(args)
         if args.command == "show":
             return _run_show(args)
+        if args.command == "cbf-evidence":
+            return _run_cbf(args)
         if args.command == "render-body":
             return _run_render(args)
         raise InputError(f"unknown command: {args.command}")

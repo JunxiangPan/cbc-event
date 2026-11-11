@@ -1,6 +1,6 @@
-# Migration guide: cbc-event 0.1.x → 0.2.0rc1
+# Migration guide: cbc-event 0.1.x → 0.2.0rc2
 
-`0.2.0rc1` is opt-in. Existing 0.1.x producers, readers, and consumers keep
+`0.2.0rc2` is opt-in. Existing 0.1.x producers, readers, and consumers keep
 working without editing their event stream.
 
 ## Compatibility promise
@@ -83,7 +83,7 @@ cbc-viewer verify --scope event-log --event-dir ./events
 - CBE/CBP/CBS/CBM can stay on v1 indefinitely during 0.2.x.
 - Removing v1 is not part of 0.2.x. A future removal would require a new
   protocol version and a separate migration decision.
-- This release is `0.2.0rc1`; there is no stable 0.2.0 and no published PyPI
+- This release is `0.2.0rc2`; there is no stable 0.2.0 and no published PyPI
   stable artifact from this branch.
 
 ## Rollback

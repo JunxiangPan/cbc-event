@@ -6,10 +6,11 @@ from pathlib import Path
 from typing import Any
 
 from .canonical import CanonicalizationError, canonical_bytes, canonical_json
+from .cbf import CBF_EVIDENCE_V1, CBF_VIEW_V1, CbfEvidence, CbfEvidenceError
 from .protocol import CURRENT_SCHEMA, SUPPORTED_SCHEMAS, UnsupportedEventVersion, V1, V2, negotiate
 from .store import EventStore, GENESIS, compute_event_hash, read_events, validate_event
 
-__version__ = "0.2.0rc1"
+__version__ = "0.2.0rc2"
 
 __all__ = [
     "Client",
@@ -20,6 +21,10 @@ __all__ = [
     "UnsupportedEventVersion",
     "V1",
     "V2",
+    "CBF_EVIDENCE_V1",
+    "CBF_VIEW_V1",
+    "CbfEvidence",
+    "CbfEvidenceError",
     "CanonicalizationError",
     "negotiate",
     "canonical_bytes",
@@ -28,6 +33,7 @@ __all__ = [
     "emit",
     "read_events",
     "validate_event",
+    "load_cbf_evidence",
 ]
 
 
@@ -85,6 +91,11 @@ class Client:
             evidence_hash=evidence_hash,
             event_type=event_type,
         )
+
+
+def load_cbf_evidence(path: str | Path) -> CbfEvidence:
+    """Read cbf-evidence/v1 without importing or requiring CBF."""
+    return CbfEvidence.load(path)
 
 
 def emit(

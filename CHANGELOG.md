@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.2.0rc1 — unreleased candidate
+## 0.2.0rc2 — unreleased candidate
+
+- Added the optional, dependency-free `cbf-evidence/v1` adapter: normalized
+  CBC view and pure conversion to a cbc-event/v2 event; no CBF import or
+  runtime dependency.
+- CBF hash status distinguishes verified evidence from the CBF 0.1.0
+  `summary`-after-sealing quirk and from a mismatch.
+
+## 0.2.0rc1 — pre-release
 
 - Added opt-in `cbc-event/v2`: strict `identity` (package_id / producer_id /
   package_version), `event_type`, `chain_id`, UUID `event_id`, and lowercase

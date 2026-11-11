@@ -1,0 +1,27 @@
+{
+  "schema": "cbf-evidence/v1",
+  "tool": "cbf",
+  "version": "0.1.0",
+  "policy_version": "0.1.0",
+  "policy_sha256": "b12ed6d57690e3aba5272e796b0c56cc366de0e3f67b641ae922827bc547ce51",
+  "policy_effective_sha256": "b12ed6d57690e3aba5272e796b0c56cc366de0e3f67b641ae922827bc547ce51",
+  "project": "tmp-cbf-evidence",
+  "repo": "",
+  "commit": "",
+  "ref": "",
+  "surface": "git",
+  "result": "PASS",
+  "findings": [],
+  "scanned": {
+    "files": 1,
+    "bytes": 4,
+    "skipped": 0,
+    "ignored": 0
+  },
+  "generated_at": "2026-11-11T21:30:04Z",
+  "evidence_sha256": "bc0b31bc2243f5de5dcdbe67d79a9305f0b41859354ffe66c0dc2685e5ed2825",
+  "summary": {
+    "blocking": 0,
+    "warnings": 0
+  }
+}

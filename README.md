@@ -6,17 +6,18 @@ The shared event protocol for the CB ecosystem.
 or CBC, and it does not open network ports. Producers append JSONL files; CBC
 reads them.
 
-## Version freeze and 0.2.0rc1
+## Version freeze and 0.2.0rc2
 
 **`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**
 Within `0.1.x` only optional fields may be appended. Existing required fields
 must not be deleted, renamed, reordered, or have their type or meaning changed.
 
-`0.2.0rc1` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
+`0.2.0rc2` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
 emit format. v1 events remain readable; unknown schemas fail closed. See
 [`docs/event-protocol-v2.md`](docs/event-protocol-v2.md), the
-[`migration guide`](docs/migration-0.2.md), and the
-[`compatibility matrix`](docs/compatibility-matrix.md).
+[`migration guide`](docs/migration-0.2.md), the
+[`compatibility matrix`](docs/compatibility-matrix.md), and the
+[`optional CBF adapter`](docs/cbf-adapter.md).
 
 Once CBS 1.6.4 and CBP 0.1.0 begin consuming `cbc-event`, the `0.1.0` schema and
 canonicalization rules are frozen. Any breaking change must become `0.2.0` with
@@ -84,7 +85,7 @@ report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
 report["problems"], report["warnings"], report["critical"]
 ```
 
-## CBC read-only viewer (`cbc_viewer 0.2.0rc1`)
+## CBC read-only viewer (`cbc_viewer 0.2.0rc2`)
 
 The viewer is in the same repository but is a separate package/entry point. It
 uses only the standard library and `cbc_event.canonical`; `pip install
