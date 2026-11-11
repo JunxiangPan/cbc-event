@@ -1,6 +1,6 @@
 """CBC read-only evidence viewer.
 
-The protocol package (``cbc_event``) stays frozen at 0.1.0.  This package adds
+The protocol package (``cbc_event``) supports v1 and opt-in v2.  This package adds
 release/event-log chain verification, body rendering, and a GET-only GitHub
 transport; it has no write-side release operations.
 """
@@ -16,6 +16,7 @@ from .errors import (
     NotFoundError,
     ReadOnlyViolation,
     UnsupportedBodyHashScope,
+    UnsupportedEventVersion,
 )
 from .event_chain import build_event_manifest, verify_event_log
 from .reports import load_gate_reports, validate_cbe, validate_cbp
@@ -33,6 +34,7 @@ __all__ = [
     "NotFoundError",
     "ReadOnlyViolation",
     "UnsupportedBodyHashScope",
+    "UnsupportedEventVersion",
     "VerificationResult",
     "build_event_manifest",
     "build_manifest",
@@ -53,4 +55,4 @@ __all__ = [
     "verify_release",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0rc1"

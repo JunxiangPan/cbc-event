@@ -41,6 +41,16 @@ class SchemaTests(unittest.TestCase):
         self.assertTrue(required <= set(release))
         self.assertEqual(release["package_id"], "cbc")
 
+    def test_event_v2_schema_requires_identity_and_chain(self) -> None:
+        schema = json.loads((ROOT / "schemas" / "cbc-event-v2.schema.json").read_text(encoding="utf-8"))
+        required = set(schema["required"])
+        self.assertIn("identity", required)
+        self.assertIn("event_type", required)
+        self.assertIn("chain_id", required)
+        self.assertEqual(schema["properties"]["schema"]["const"], "cbc-event/v2")
+        self.assertEqual(set(schema["properties"]["event_type"]["enum"]),
+                         {"observation", "decision", "gate", "release", "error"})
+
     def test_chain_manifest_shape(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             paths = make_release(Path(tmp))

@@ -6,11 +6,17 @@ The shared event protocol for the CB ecosystem.
 or CBC, and it does not open network ports. Producers append JSONL files; CBC
 reads them.
 
-## Version freeze
+## Version freeze and 0.2.0rc1
 
 **`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**
 Within `0.1.x` only optional fields may be appended. Existing required fields
 must not be deleted, renamed, reordered, or have their type or meaning changed.
+
+`0.2.0rc1` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
+emit format. v1 events remain readable; unknown schemas fail closed. See
+[`docs/event-protocol-v2.md`](docs/event-protocol-v2.md), the
+[`migration guide`](docs/migration-0.2.md), and the
+[`compatibility matrix`](docs/compatibility-matrix.md).
 
 Once CBS 1.6.4 and CBP 0.1.0 begin consuming `cbc-event`, the `0.1.0` schema and
 canonicalization rules are frozen. Any breaking change must become `0.2.0` with
@@ -78,7 +84,7 @@ report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
 report["problems"], report["warnings"], report["critical"]
 ```
 
-## CBC read-only viewer (`cbc_viewer 0.1.0`)
+## CBC read-only viewer (`cbc_viewer 0.2.0rc1`)
 
 The viewer is in the same repository but is a separate package/entry point. It
 uses only the standard library and `cbc_event.canonical`; `pip install
@@ -99,6 +105,11 @@ edit, or force-update command. Its GitHub transport accepts only `GET`/`HEAD`;
 `render-body` is stdout-only (no `--report-out`, no write path). See
 [`docs/release-chain.md`](docs/release-chain.md) for the chain format, exit
 codes, tamper-detection matrix, and the body base/appendix rule.
+`docs/standalone-install.md` records the clean-environment wheel/CLI check.
+
+Event logs may mix v1 and v2; `chain_profile` is `event-log/v1`,
+`event-log/v2`, or `event-log/mixed`, and unknown fields are warnings. Unknown
+schemas are exit 2 `UNSUPPORTED_EVENT_VERSION`.
 
 Two integration facts are deliberate:
 
@@ -114,15 +125,19 @@ Reports and body blocks carry both counts: `link_count` includes the manifest
 header and every link, while `asset_link_count` counts only `kind=asset` leaves.
 Consumers must not compare `link_count` to the number of assets.
 
-`F05` (real CBS body-generator compatibility) is skipped in the standalone
-`cbc-event` CI because the sibling `public-release` checkout is absent. The CBS
-v1.7 release-train integration CI must run it with that checkout; a skip there
-means integration acceptance is incomplete.
+`F05` (real CBS body-generator compatibility) is still **not a full-train PASS**.
+The standalone CI cannot provide the CBS v1.7 release train; train-like coverage
+is recorded separately and the complete train remains an external blocker. See
+[`docs/f05-train-evidence.md`](docs/f05-train-evidence.md).
 
 ## Compatibility
 
 `cbc-event 0.1.x` may only add fields. Existing field names and types are frozen.
 Consumers must ignore unknown fields and emit a warning.
+
+`0.2.x` reads v1 and v2. v2 is opt-in; v1 remains the default emit format.
+Unknown versions are fail-closed (`UNSUPPORTED_EVENT_VERSION`), never treated as
+v1 and never skipped.
 
 ## Development
 

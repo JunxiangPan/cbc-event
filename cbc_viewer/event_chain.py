@@ -12,9 +12,10 @@ from pathlib import Path
 from typing import Any
 
 from cbc_event import GENESIS, validate_event
+from cbc_event.protocol import V1, V2, UnsupportedEventVersion as ProtocolVersionError, negotiate
 
 from .chain import HASH_RE, is_safe_name, sha256_bytes, sha256_file
-from .errors import BrokenLink, InputError
+from .errors import BrokenLink, InputError, UnsupportedEventVersion
 
 
 @dataclass(frozen=True)
@@ -24,6 +25,10 @@ class EventCheck:
     link_count: int
     verified_count: int
     head: dict[str, Any] | None
+    profile: str = "event-log/v1"
+    versions: tuple[str, ...] = ()
+    chain_ids: tuple[str, ...] = ()
+    warnings: tuple[str, ...] = ()
 
 
 def _read_head(event_dir: Path) -> tuple[dict[str, Any], bytes]:
@@ -104,6 +109,15 @@ def read_event_manifest(path: Path | str) -> dict[str, Any]:
     return data
 
 
+def _profile(versions: list[str]) -> str:
+    unique = set(versions)
+    if unique == {V1, V2}:
+        return "event-log/mixed"
+    if unique == {V2}:
+        return "event-log/v2"
+    return "event-log/v1"
+
+
 def verify_event_log(event_dir: Path | str, *, manifest_path: Path | str | None = None) -> EventCheck:
     root = Path(event_dir)
     files = _event_files(root)
@@ -145,6 +159,10 @@ def verify_event_log(event_dir: Path | str, *, manifest_path: Path | str | None 
     expected_prev = GENESIS
     root_hash = GENESIS
     verified = 0
+    versions: list[str] = []
+    chain_ids: list[str] = []
+    warnings: list[str] = []
+    v2_chain_id: str | None = None
     for path in files:
         if manifest_path is not None:
             declared = declared_files.get(path.name)
@@ -166,10 +184,35 @@ def verify_event_log(event_dir: Path | str, *, manifest_path: Path | str | None 
             except ValueError as exc:
                 return EventCheck(BrokenLink(kind="event", name=f"{path.name}:{lineno}", reason="report_invalid",
                                              detail=str(exc)), root_hash, declared_count or 0, verified, head)
+            try:
+                info = negotiate(event.get("schema"))
+            except ProtocolVersionError as exc:
+                raise UnsupportedEventVersion(
+                    f"unsupported event version at {path.name}:{lineno}: {exc}"
+                ) from exc
             report = validate_event(event, expected_seq=expected_seq, prev_hash=expected_prev)
+            warnings.extend(f"{path.name}:{lineno}: {item}" for item in report["warnings"])
+            versions.append(info.schema)
+            if info.schema == V2:
+                chain_id = str(event.get("chain_id", ""))
+                if chain_id not in chain_ids:
+                    chain_ids.append(chain_id)
+                if v2_chain_id is None:
+                    v2_chain_id = chain_id
+                elif chain_id != v2_chain_id:
+                    return EventCheck(
+                        BrokenLink(kind="chain", name="chain_id", reason="chain_identity_mismatch",
+                                   expected=v2_chain_id, actual=chain_id,
+                                   detail="all cbc-event/v2 events in one log must share chain_id"),
+                        root_hash, declared_count or 0, verified, head,
+                        profile="event-log/v2", versions=tuple(versions),
+                        chain_ids=tuple(chain_ids), warnings=tuple(warnings),
+                    )
             if report["problems"]:
                 return EventCheck(BrokenLink(kind="event", name=f"{path.name}:{lineno}", reason="report_invalid",
-                                             detail="; ".join(report["problems"])), root_hash, declared_count or 0, verified, head)
+                                             detail="; ".join(report["problems"])), root_hash, declared_count or 0, verified, head,
+                                  profile=_profile(versions), versions=tuple(versions),
+                                  chain_ids=tuple(chain_ids), warnings=tuple(warnings))
             if report["critical"]:
                 reason = "chain_seq_gap" if any("sequence gap" in item for item in report["critical"]) else "chain_hash_mismatch"
                 return EventCheck(BrokenLink(kind="event", name=f"{path.name}:{lineno}", reason=reason,
@@ -192,7 +235,9 @@ def verify_event_log(event_dir: Path | str, *, manifest_path: Path | str | None 
     if declared_root is not None and declared_root != root_hash:
         return EventCheck(BrokenLink(kind="chain", name="root_hash", reason="chain_root_mismatch",
                                      expected=declared_root, actual=root_hash), root_hash, declared_count or 0, verified, head)
-    return EventCheck(None, root_hash, declared_count if declared_count is not None else verified, verified, head)
+    profile = _profile(versions)
+    return EventCheck(None, root_hash, declared_count if declared_count is not None else verified, verified, head,
+                      profile=profile, versions=tuple(versions), chain_ids=tuple(chain_ids), warnings=tuple(warnings))
 
 
 def build_event_manifest(event_dir: Path | str) -> dict[str, Any]:

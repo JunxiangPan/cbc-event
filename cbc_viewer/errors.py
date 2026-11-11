@@ -44,6 +44,12 @@ class UnsupportedBodyHashScope(InputError):
     reason = "UNSUPPORTED_BODY_HASH_SCOPE"
 
 
+class UnsupportedEventVersion(InputError):
+    """The event log names a protocol version this viewer cannot read."""
+
+    reason = "UNSUPPORTED_EVENT_VERSION"
+
+
 class InfraError(ViewerError):
     """Provider/network failure; not a PASS and not a silent SKIP (exit 3)."""
 

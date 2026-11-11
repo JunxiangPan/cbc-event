@@ -690,32 +690,41 @@ def verify_event_log_report(
     *,
     manifest_path: Path | str | None = None,
 ) -> VerificationResult:
-    inputs = {"event_dir": str(event_dir), "chain": str(manifest_path) if manifest_path else None}
+    inputs = {
+        "event_dir": str(event_dir),
+        "chain": str(manifest_path) if manifest_path else None,
+    }
     try:
         check = verify_event_log(event_dir, manifest_path=manifest_path)
     except InputError as exc:
         report = _report(
-            scope="event-log", version="0.1.0", tag=None,
+            scope="event-log", version="0.2.0", tag=None,
             gate_status="FAIL", chain_status="FAIL", root_hash=None, link_count=0,
             upload_status="NOT_UPLOADED", upload_blocked_reason="input_error",
-            chain_profile="event-log/v1", inputs=inputs, error=exc.as_dict(),
+            chain_profile="event-log/unknown", inputs=inputs, error=exc.as_dict(),
         )
         return _result(report, 2)
     if check.broken is not None:
         report = _report(
-            scope="event-log", version="0.1.0", tag=None,
+            scope="event-log", version="0.2.0", tag=None,
             gate_status="FAIL", chain_status="FAIL", root_hash=check.root_hash,
             link_count=check.link_count, broken_link=check.broken,
             upload_status="NOT_UPLOADED", verified_link_count=check.verified_count,
-            upload_blocked_reason="chain_broken", chain_profile="event-log/v1", inputs=inputs,
+            upload_blocked_reason="chain_broken", chain_profile=check.profile,
+            inputs={**inputs, "event_versions": list(check.versions),
+                    "event_chain_ids": list(check.chain_ids),
+                    "event_warnings": list(check.warnings)},
         )
         return _result(report, 3)
     report = _report(
-        scope="event-log", version="0.1.0", tag=None,
+        scope="event-log", version="0.2.0", tag=None,
         gate_status="PASS", chain_status="PASS", root_hash=check.root_hash,
         link_count=check.link_count, upload_status="NOT_UPLOADED",
         verified_link_count=check.verified_count,
         upload_blocked_reason="not_applicable_event_scope",
-        chain_profile="event-log/v1", inputs=inputs,
+        chain_profile=check.profile,
+        inputs={**inputs, "event_versions": list(check.versions),
+                "event_chain_ids": list(check.chain_ids),
+                "event_warnings": list(check.warnings)},
     )
     return _result(report, 0)

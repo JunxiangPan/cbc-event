@@ -11,7 +11,7 @@ from .body import BodyProblem, render_appendix, render_not_uploaded_entry
 from .errors import InputError
 from .verify import VerificationResult, verify_event_log_report, verify_release
 
-VERSION = "0.1.0"
+VERSION = "0.2.0rc1"
 
 
 def _build_parser() -> argparse.ArgumentParser:
