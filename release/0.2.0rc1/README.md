@@ -1,6 +1,6 @@
 # cbc-event 0.2.0rc1 — release candidate
 
-**Status: 0.2.0rc1 candidate. No tag, no stable 0.2.0, no PyPI upload.**
+**Status: 0.2.0rc1 pre-release candidate. No stable 0.2.0, no PyPI upload.**
 
 Branch: `0.2.0-dev`. Source code commit: `6377d22` (docs may be later).
 
@@ -11,7 +11,7 @@ Branch: `0.2.0-dev`. Source code commit: `6377d22` (docs may be later).
 | `cbc_event-0.2.0rc1-py3-none-any.whl` | `ed74cb941819cd3cdb6dd4ae656f5ee9c4ba20f36b40679038543bdaf4d13d31` |
 | `cbc_event-0.2.0rc1.tar.gz` | `17b140d0eee4d808ab776b665dc1ac7e6ecc64368f2b767b6e07546b4b34a001` |
 
-The artifacts were built locally; they are not published.
+The artifacts are the rc1 pre-release assets; no PyPI upload is made.
 
 ## Scope
 
