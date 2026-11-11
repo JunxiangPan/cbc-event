@@ -1,47 +1,32 @@
-# CBF Adoption — CBC
+# CBF adoption — CBC
 
 Status: **PENDING_CBF_0.1.0**
 
-CBF 0.1.0 has not been released. This project is **not CBF-integrated** and has
-**no CBF PASS**. This document is Phase 0 preparation only; it does not claim
-compatibility or a completed gate.
+- surfaces: `git` / `api` / `local-ai`
+- planned gate: `cbf gate --surface git`
+- planned CI job: `cbf-privacy-gate`
+- evidence format: `cbf-evidence/v1`
 
-| Field | Value |
-|---|---|
-| Project | CBC — event protocol / viewer |
-| Status | `PENDING_CBF_0.1.0` |
-| Surfaces | `git`, `api`, `local-ai` |
-| Planned gate | `cbf gate --surface git` |
-| Planned CI job | `cbf-privacy-gate` (reserved, **not active** in Phase 0) |
-| Evidence format | `cbf-evidence/v1` |
+CBC has **not** integrated CBF. There is **no CBF PASS**, and CBC does not
+claim CBF compatibility. CBF is an independent project; CBC does not import
+it and does not require it to be installed.
 
-## Current state
+## Phase 0 (current)
 
-- CBF is **not installed** by this project and is not a runtime dependency.
-- No `cbf.policy.json` is pinned yet; Phase 1 adds it after CBF 0.1.0rc1.
-- No pre-push hook runs CBF yet.
-- The CI job name `cbf-privacy-gate` is reserved but intentionally absent from
-  active CI until Phase 1. It is not an `if: false` or `continue-on-error`
-  placeholder.
-- Historical releases/tags made before CBF 0.1.0 must not be described as CBF
-  PASS.
+- Adoption documented here.
+- A fail-closed `cbf-privacy-gate` workflow is reserved; it exits 1 with
+  `CBF_PENDING_0.1.0` and does not produce a PASS.
+- Existing CI does not fake a CBF result and does not use `continue-on-error`
+  or `if: false` to bypass it.
+- No GitHub Release, PyPI upload, or git push is claimed to have CBF evidence.
 
-## Planned integration
+## Phase 1 (after CBF 0.1.0rc1)
 
-1. Add `cbf.policy.json` pinned to the CBF policy version/hash.
-2. Add the `cbf-privacy-gate` CI job; failures block.
-3. Install a local pre-push hook invoking `cbf gate --surface git`.
-4. Require CBF PASS before git push / GitHub Release / PyPI.
-5. Store `cbf-evidence/v1` evidence; never synthesize a PASS.
-6. Phase 2: make `cbf-privacy-gate` a required check and include CBF evidence
-   in releases/uploads.
+- Add `cbf.policy.json` pinned to the CBF policy version/hash.
+- Wire `cbf-privacy-gate` into the release/upload path and add the local
+  pre-push `cbf gate --surface git`.
+- Block upload/release on CBF failure; record `cbf-evidence/v1`.
 
-## Project-specific boundary
+## Boundary
 
-- CBC already has a read-only `cbf-evidence/v1` adapter (`cbc-viewer cbf-evidence`); it never verifies or grants CBF PASS.
-- The adapter is optional; CBC does not import CBF and CBF does not depend on CBC.
-- A CBF evidence document is displayed with result, findings and policy hashes; hash mismatches fail the conversion path.
-
-CBF remains an independent project: CLI + JSON + CI integration, not code
-coupling. This project can build and test without CBF installed, but upload and
-release are not CBF-certified until the gate actually runs.
+CBC will read cbf-evidence/v1 as an optional evidence reader/adapter; CBF is not a runtime dependency.
