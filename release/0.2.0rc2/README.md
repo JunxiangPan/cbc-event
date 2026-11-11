@@ -1,9 +1,9 @@
 # cbc-event 0.2.0rc2 — candidate
 
-**Status: 0.2.0rc2 candidate. No rc2 tag yet, no stable 0.2.0, no PyPI upload.**
+**Status: 0.2.0rc2 pre-release candidate. No stable 0.2.0, no PyPI upload.**
 
 rc1 remains the tagged pre-release (`v0.2.0rc1`); rc2 is the CBF-adapter
-candidate and requires review/approval before any tag.
+pre-release candidate. See `RELEASE_NOTES.md`.
 
 ## Artifacts
 
