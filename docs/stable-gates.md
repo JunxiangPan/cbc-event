@@ -1,13 +1,13 @@
 # Stable 0.2.0 gates
 
-`0.2.0rc1` and `0.2.0rc2` are release candidates. Nothing below is a stable
+`0.2.0rc1` and `0.2.0rc3` are release candidates. Nothing below is a stable
 release until **all** gates pass.
 
 | Gate | Current status |
 |---|---|
 | 0.1.0 regression suite | PASS |
 | 0.2.0rc1 install + dual-read | PASS |
-| 0.2.0rc2 CBF adapter | PASS (candidate; review pending) |
+| 0.2.0rc3 CBF adapter | PASS (candidate; review pending) |
 | F05 real CBS v1.7 full train | **NOT RUN** |
 | Stable tag `v0.2.0` | **NOT CREATED** |
 | PyPI stable 0.2.0 | **NOT UPLOADED** |

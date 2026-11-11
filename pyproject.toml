@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cbc-event"
-version = "0.2.0rc2"
+version = "0.2.0rc3"
 description = "Append-only event protocol and zero-dependency client for the CB ecosystem"
 readme = "README.md"
 requires-python = ">=3.10"

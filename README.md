@@ -6,18 +6,19 @@ The shared event protocol for the CB ecosystem.
 or CBC, and it does not open network ports. Producers append JSONL files; CBC
 reads them.
 
-## Version freeze and 0.2.0rc2
+## Version freeze and 0.2.0rc3
 
 **`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**
 Within `0.1.x` only optional fields may be appended. Existing required fields
 must not be deleted, renamed, reordered, or have their type or meaning changed.
 
-`0.2.0rc2` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
+`0.2.0rc3` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
 emit format. v1 events remain readable; unknown schemas fail closed. See
 [`docs/event-protocol-v2.md`](docs/event-protocol-v2.md), the
 [`migration guide`](docs/migration-0.2.md), the
 [`compatibility matrix`](docs/compatibility-matrix.md), and the
-[`optional CBF adapter`](docs/cbf-adapter.md).
+[`optional CBF adapter`](docs/cbf-adapter.md), and the
+[`semantic-verdict reader`](docs/semantic-verdict.md).
 
 Once CBS 1.6.4 and CBP 0.1.0 begin consuming `cbc-event`, the `0.1.0` schema and
 canonicalization rules are frozen. Any breaking change must become `0.2.0` with
@@ -85,7 +86,7 @@ report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
 report["problems"], report["warnings"], report["critical"]
 ```
 
-## CBC read-only viewer (`cbc_viewer 0.2.0rc2`)
+## CBC read-only viewer (`cbc_viewer 0.2.0rc3`)
 
 The viewer is in the same repository but is a separate package/entry point. It
 uses only the standard library and `cbc_event.canonical`; `pip install
@@ -98,6 +99,8 @@ cbc-viewer verify --scope release --release-dir ./release
 cbc-viewer verify --scope event-log --event-dir ~/.cb/events --chain ./events/cbc-chain.json
 cbc-viewer show --report ./cbc-chain-report.json
 cbc-viewer render-body --report ./cbc-chain-report.json --format appendix
+cbc-viewer cbf-evidence --evidence .cbf/evidence/git-PASS.json
+cbc-viewer semantic-verdict --evidence semantic-verdict.json
 ```
 
 The viewer is **read-only**: there is no upload, publish, delete, tag, release
@@ -106,7 +109,8 @@ edit, or force-update command. Its GitHub transport accepts only `GET`/`HEAD`;
 `render-body` is stdout-only (no `--report-out`, no write path). See
 [`docs/release-chain.md`](docs/release-chain.md) for the chain format, exit
 codes, tamper-detection matrix, and the body base/appendix rule.
-`docs/standalone-install.md` records the clean-environment wheel/CLI check.
+`docs/standalone-install.md` records the clean-environment wheel/CLI check;
+`docs/semantic-verdict.md` documents the optional semantic verdict reader.
 
 Event logs may mix v1 and v2; `chain_profile` is `event-log/v1`,
 `event-log/v2`, or `event-log/mixed`, and unknown fields are warnings. Unknown

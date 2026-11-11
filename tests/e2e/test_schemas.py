@@ -51,6 +51,12 @@ class SchemaTests(unittest.TestCase):
         self.assertEqual(set(schema["properties"]["event_type"]["enum"]),
                          {"observation", "decision", "gate", "release", "error"})
 
+    def test_semantic_verdict_schema(self) -> None:
+        schema = json.loads((ROOT / "schemas" / "semantic-verdict-v1.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(schema["properties"]["schema"]["const"], "semantic-verdict/v1")
+        self.assertEqual(set(schema["properties"]["verdict"]["enum"]), {"PASS", "FAIL", "NOT_RUN"})
+        self.assertIn("confidence", schema["properties"])
+
     def test_chain_manifest_shape(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             paths = make_release(Path(tmp))

@@ -11,7 +11,7 @@ from .body import BodyProblem, render_appendix, render_not_uploaded_entry
 from .errors import InputError
 from .verify import VerificationResult, verify_event_log_report, verify_release
 
-VERSION = "0.2.0rc2"
+VERSION = "0.2.0rc3"
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -48,6 +48,10 @@ def _build_parser() -> argparse.ArgumentParser:
     cbf.add_argument("--chain-id")
     cbf.add_argument("--seq", type=int)
     cbf.add_argument("--prev-hash", default="sha256:" + "0" * 64)
+
+    semantic = sub.add_parser("semantic-verdict", help="read semantic-verdict/v1 as a non-factual signal")
+    semantic.add_argument("--evidence", required=True)
+    semantic.add_argument("--json", action="store_true", help="print the full normalized view as JSON")
 
     render = sub.add_parser("render-body", help="render the CBC body block")
     render.add_argument("--report", required=True)
@@ -196,6 +200,41 @@ def _run_cbf(args: argparse.Namespace) -> int:
     return 0
 
 
+def _format_semantic(verdict: object) -> str:
+    confidence = "not provided" if verdict.confidence is None else f"{verdict.confidence:.3f}"
+    lines = [
+        f"Semantic verdict: {verdict.verdict}",
+        f"confidence: {confidence}",
+        f"subject: {verdict.subject.get('package_id', '')} "
+        f"{verdict.subject.get('version', '')}".rstrip(),
+        f"artifact_sha256: {verdict.subject.get('artifact_sha256', '')}",
+        f"evidence_sha256: {verdict.evidence_sha256}",
+        f"findings: {len(verdict.findings)}",
+        "note: " + "semantic signal only; not factual proof and not a gate PASS",
+    ]
+    for finding in verdict.findings:
+        title = finding.get("rule_id") or finding.get("title") or finding.get("category") or "finding"
+        severity = finding.get("severity", "")
+        path = finding.get("path", "")
+        line = finding.get("line", "")
+        confidence_value = finding.get("confidence")
+        suffix = f" (confidence {confidence_value})" if confidence_value is not None else ""
+        location = f"{path}:{line}" if path else ""
+        lines.append(f"- [{severity}] {title} {location}{suffix}".rstrip())
+    return "\n".join(lines)
+
+
+def _run_semantic(args: argparse.Namespace) -> int:
+    from cbc_event.semantic import SemanticVerdict
+
+    verdict = SemanticVerdict.load(args.evidence)
+    if args.json:
+        print(json.dumps(verdict.view(), ensure_ascii=False, indent=2))
+    else:
+        print(_format_semantic(verdict))
+    return 0
+
+
 def _run_render(args: argparse.Namespace) -> int:
     report = _load_report(args.report)
     if args.format == "appendix":
@@ -216,6 +255,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_show(args)
         if args.command == "cbf-evidence":
             return _run_cbf(args)
+        if args.command == "semantic-verdict":
+            return _run_semantic(args)
         if args.command == "render-body":
             return _run_render(args)
         raise InputError(f"unknown command: {args.command}")

@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.2.0rc2 — unreleased candidate
+## 0.2.0rc3 — unreleased candidate
+
+- Added optional, read-only `semantic-verdict/v1` reader/viewer.
+  Displays verdict, confidence, findings, policy and evidence hash; explicitly
+  labels the verdict as a semantic signal, not factual proof.
+
+## 0.2.0rc2 — pre-release
 
 - Added Phase 0 CBF adoption status (`PENDING_CBF_0.1.0`), reserved a manual
   fail-closed `cbf-privacy-gate` workflow, and documented that the CBF adapter
