@@ -170,3 +170,6 @@ Once CBF 0.1.0rc1 is available, this project must pin a CBF policy and run
 `cbf gate --surface git` before upload/release. Until then, do not describe the
 project as CBF-compatible or CBF-passed.
 
+## CBF status
+
+CBF 0.1.0 has not been released. This project is **not CBF-integrated** and has **no CBF PASS**. Phase 0 preparation is recorded in [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md); no runtime dependency, no import, and no CBF-certified release exists yet.
