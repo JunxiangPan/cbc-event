@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from .canonical import canonical_bytes
+from .protocol import V1, V2, normalize_emit_version
 from .schema import validate_event as _validate_schema
 
 GENESIS = "sha256:" + ("0" * 64)
@@ -108,10 +109,30 @@ def _read_head(event_dir: Path) -> dict[str, Any] | None:
 class EventStore:
     """Append one event at a time; disabled stores never touch the filesystem."""
 
-    def __init__(self, event_dir: Path | str, source: dict[str, str], enabled: bool = False) -> None:
+    def __init__(
+        self,
+        event_dir: Path | str,
+        source: dict[str, str],
+        enabled: bool = False,
+        *,
+        protocol_version: str = "v1",
+        identity: dict[str, str] | None = None,
+        chain_id: str | None = None,
+    ) -> None:
         self.event_dir = Path(event_dir)
         self.source = dict(source)
         self.enabled = enabled
+        self.protocol_version = normalize_emit_version(protocol_version)
+        if self.protocol_version == V2:
+            if not isinstance(identity, dict) or not identity:
+                raise ValueError("cbc-event/v2 requires an identity object")
+            if not isinstance(chain_id, str) or not chain_id:
+                raise ValueError("cbc-event/v2 requires a non-empty chain_id")
+            self.identity = dict(identity)
+            self.chain_id = chain_id
+        else:
+            self.identity = None
+            self.chain_id = None
 
     def emit(
         self,
@@ -121,9 +142,15 @@ class EventStore:
         *,
         evidence: bytes | None = None,
         evidence_hash: str | None = None,
+        event_type: str | None = None,
     ) -> dict[str, Any] | None:
         if not self.enabled:
             return None
+        if self.protocol_version == V2:
+            if not isinstance(event_type, str) or not event_type:
+                raise ValueError("cbc-event/v2 requires an explicit event_type")
+        elif event_type is not None:
+            raise ValueError("event_type requires protocol_version='v2'")
         if evidence is not None:
             evidence_hash = _sha256(evidence)
         if evidence_hash is None:
@@ -134,7 +161,7 @@ class EventStore:
             seq = int(head["seq"]) + 1 if head else 1
             prev_hash = str(head["last_hash"]) if head else GENESIS
             event: dict[str, Any] = {
-                "schema": "cbc-event/v1",
+                "schema": self.protocol_version,
                 "event_id": str(uuid.uuid4()),
                 "timestamp": _timestamp(),
                 "source": self.source,
@@ -145,6 +172,10 @@ class EventStore:
                 "prev_hash": prev_hash,
                 "seq": seq,
             }
+            if self.protocol_version == V2:
+                event["identity"] = dict(self.identity or {})
+                event["event_type"] = event_type
+                event["chain_id"] = self.chain_id
             report = validate_event({**event, "event_hash": GENESIS})
             if report["problems"]:
                 raise ValueError("invalid cbc-event: " + "; ".join(report["problems"]))

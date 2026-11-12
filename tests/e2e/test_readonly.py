@@ -53,7 +53,7 @@ class ReadOnlyTests(unittest.TestCase):
         subparsers = next(
             action for action in parser._actions if hasattr(action, "choices") and action.choices
         )
-        self.assertEqual(set(subparsers.choices), {"verify", "show", "render-body"})
+        self.assertEqual(set(subparsers.choices), {"verify", "show", "cbf-evidence", "semantic-verdict", "render-body"})
         for forbidden in ("upload", "publish", "delete", "tag", "edit", "force", "release"):
             self.assertNotIn(forbidden, subparsers.choices)
 

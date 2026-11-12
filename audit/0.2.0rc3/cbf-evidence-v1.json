@@ -1,0 +1,29 @@
+{
+  "schema": "cbf-evidence/v1",
+  "tool": "cbf",
+  "version": "0.1.0rc1",
+  "policy_version": "0.1.1",
+  "policy_sha256": "fd4c62dd87648264ccf6d261daab16f29724617f0678ab29453e94dfdba19710",
+  "policy_effective_sha256": "ec258743138fe9831eee2a9d48d14803d3ec5b59b68019cc4ff404122ce070a9",
+  "waivers_sha256": "c84bd658af2d34d92fe25444732f7b7f5a589b9733f156d738c2ed4fb8e1bb93",
+  "project": "cbf",
+  "repo": "",
+  "commit": "e75599d7194d7599bd2d18c1e1e71f09a3265d9c",
+  "ref": "refs/heads/main",
+  "surface": "git",
+  "result": "PASS",
+  "findings": [],
+  "scanned": {
+    "files": 0,
+    "bytes": 0,
+    "skipped": 0,
+    "ignored": 0
+  },
+  "generated_at": "2026-11-12T05:52:07Z",
+  "evidence_sha256": "08567f171362f4fa8cb42855f0caab842738975ae2104078912374f1a3fabd7c",
+  "summary": {
+    "blocking": 0,
+    "warnings": 0,
+    "known": 0
+  }
+}

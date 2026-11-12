@@ -21,3 +21,11 @@ The reader verifies:
 
 A mismatch is reported as a chain problem. The reader does not silently repair
 or rewrite the log.
+
+## v2 note (0.2.0rc1)
+
+The hash algorithm above is unchanged for `cbc-event/v2`. v2 adds
+`identity`, `event_type`, and `chain_id` to the canonical event body, so those
+fields are covered by `event_hash`. A reader must negotiate the schema before
+validating fields; an unsupported schema is a fail-closed version error, not an
+unknown field. All v2 events in one log must share `chain_id`.

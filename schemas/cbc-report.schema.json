@@ -68,7 +68,7 @@
       ]
     },
     "chain_scope": {"enum": ["release", "event-log"]},
-    "chain_profile": {"enum": ["sealed-v1", "event-log/v1"]},
+    "chain_profile": {"enum": ["sealed-v1", "event-log/v1", "event-log/v2", "event-log/mixed", "event-log/unknown"]},
     "body_hash_scope": {
       "oneOf": [
         {"enum": ["base", "full"]},

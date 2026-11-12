@@ -6,11 +6,19 @@ The shared event protocol for the CB ecosystem.
 or CBC, and it does not open network ports. Producers append JSONL files; CBC
 reads them.
 
-## Version freeze
+## Version freeze and 0.2.0rc3
 
 **`cbc-event 0.1.0` is the first formal protocol version of the CB ecosystem.**
 Within `0.1.x` only optional fields may be appended. Existing required fields
 must not be deleted, renamed, reordered, or have their type or meaning changed.
+
+`0.2.0rc3` adds an opt-in `cbc-event/v2` protocol and keeps v1 as the default
+emit format. v1 events remain readable; unknown schemas fail closed. See
+[`docs/event-protocol-v2.md`](docs/event-protocol-v2.md), the
+[`migration guide`](docs/migration-0.2.md), the
+[`compatibility matrix`](docs/compatibility-matrix.md), and the
+[`optional CBF adapter`](docs/cbf-adapter.md), and the
+[`semantic-verdict reader`](docs/semantic-verdict.md).
 
 Once CBS 1.6.4 and CBP 0.1.0 begin consuming `cbc-event`, the `0.1.0` schema and
 canonicalization rules are frozen. Any breaking change must become `0.2.0` with
@@ -78,7 +86,7 @@ report = validate_event(event, expected_seq=1, prev_hash="sha256:" + "0" * 64)
 report["problems"], report["warnings"], report["critical"]
 ```
 
-## CBC read-only viewer (`cbc_viewer 0.1.0`)
+## CBC read-only viewer (`cbc_viewer 0.2.0rc3`)
 
 The viewer is in the same repository but is a separate package/entry point. It
 uses only the standard library and `cbc_event.canonical`; `pip install
@@ -91,6 +99,8 @@ cbc-viewer verify --scope release --release-dir ./release
 cbc-viewer verify --scope event-log --event-dir ~/.cb/events --chain ./events/cbc-chain.json
 cbc-viewer show --report ./cbc-chain-report.json
 cbc-viewer render-body --report ./cbc-chain-report.json --format appendix
+cbc-viewer cbf-evidence --evidence .cbf/evidence/git-PASS.json
+cbc-viewer semantic-verdict --evidence semantic-verdict.json
 ```
 
 The viewer is **read-only**: there is no upload, publish, delete, tag, release
@@ -99,6 +109,12 @@ edit, or force-update command. Its GitHub transport accepts only `GET`/`HEAD`;
 `render-body` is stdout-only (no `--report-out`, no write path). See
 [`docs/release-chain.md`](docs/release-chain.md) for the chain format, exit
 codes, tamper-detection matrix, and the body base/appendix rule.
+`docs/standalone-install.md` records the clean-environment wheel/CLI check;
+`docs/semantic-verdict.md` documents the optional semantic verdict reader.
+
+Event logs may mix v1 and v2; `chain_profile` is `event-log/v1`,
+`event-log/v2`, or `event-log/mixed`, and unknown fields are warnings. Unknown
+schemas are exit 2 `UNSUPPORTED_EVENT_VERSION`.
 
 Two integration facts are deliberate:
 
@@ -114,15 +130,19 @@ Reports and body blocks carry both counts: `link_count` includes the manifest
 header and every link, while `asset_link_count` counts only `kind=asset` leaves.
 Consumers must not compare `link_count` to the number of assets.
 
-`F05` (real CBS body-generator compatibility) is skipped in the standalone
-`cbc-event` CI because the sibling `public-release` checkout is absent. The CBS
-v1.7 release-train integration CI must run it with that checkout; a skip there
-means integration acceptance is incomplete.
+`F05` (real CBS body-generator compatibility) is still **not a full-train PASS**.
+The standalone CI cannot provide the CBS v1.7 release train; train-like coverage
+is recorded separately and the complete train remains an external blocker. See
+[`docs/f05-train-evidence.md`](docs/f05-train-evidence.md).
 
 ## Compatibility
 
 `cbc-event 0.1.x` may only add fields. Existing field names and types are frozen.
 Consumers must ignore unknown fields and emit a warning.
+
+`0.2.x` reads v1 and v2. v2 is opt-in; v1 remains the default emit format.
+Unknown versions are fail-closed (`UNSUPPORTED_EVENT_VERSION`), never treated as
+v1 and never skipped.
 
 ## Development
 
@@ -142,3 +162,17 @@ COVERAGE_FILE=.coverage.viewer python -m coverage report --fail-under=90
 
 No runtime third-party dependencies. `pytest` and `coverage` are optional test
 dependencies.
+
+## CBF privacy gate (Phase 0)
+
+**CBF is not integrated yet.** Status: `PENDING_CBF_0.1.0`; there is **no CBF
+PASS** for this project or its releases. The `cbf-privacy-gate` job name is reserved as a name only; no workflow file is added in Phase 0. No
+`continue-on-error` / `if: false` placeholder exists. See [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md).
+
+Once CBF 0.1.0rc1 is available, this project must pin a CBF policy and run
+`cbf gate --surface git` before upload/release. Until then, do not describe the
+project as CBF-compatible or CBF-passed.
+
+## CBF status
+
+CBF 0.1.0 has not been released. This project is **not CBF-integrated** and has **no CBF PASS**. Phase 0 preparation is recorded in [`docs/CBF_ADOPTION.md`](docs/CBF_ADOPTION.md); no runtime dependency, no import, and no CBF-certified release exists yet.

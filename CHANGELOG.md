@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.2.0rc3 — unreleased candidate
+
+- Added optional, read-only `semantic-verdict/v1` reader/viewer.
+  Displays verdict, confidence, findings, policy and evidence hash; explicitly
+  labels the verdict as a semantic signal, not factual proof.
+
+## 0.2.0rc2 — pre-release
+
+- Added Phase 0 CBF adoption status (`PENDING_CBF_0.1.0`), reserved a manual
+  fail-closed `cbf-privacy-gate` workflow, and documented that the CBF adapter
+  is not a CBF PASS.
+
+- Added the optional, dependency-free `cbf-evidence/v1` adapter: normalized
+  CBC view and pure conversion to a cbc-event/v2 event; no CBF import or
+  runtime dependency.
+- CBF hash status distinguishes verified evidence from the CBF 0.1.0
+  `summary`-after-sealing quirk and from a mismatch.
+
+## 0.2.0rc1 — pre-release
+
+- Added opt-in `cbc-event/v2`: strict `identity` (package_id / producer_id /
+  package_version), `event_type`, `chain_id`, UUID `event_id`, and lowercase
+  hashes. v1 is still the default emit format.
+- Added fail-closed version negotiation; unknown schemas raise
+  `UNSUPPORTED_EVENT_VERSION` (viewer exit 2) and are never read as v1.
+- Viewer now dual-reads v1/v2 and reports `event-log/v1`, `event-log/v2`, or
+  `event-log/mixed`; unknown fields are warnings, chain_id mismatch is exit 3.
+- Added protocol spec, migration guide, compatibility matrix, and v2 schema.
+- F05 full CBS v1.7 train remains unrun; no full-train PASS is claimed.
+
 ## Unreleased — cbc_viewer 0.1.0
 
 - Added the read-only `cbc_viewer` package and `cbc-viewer` entry point:
