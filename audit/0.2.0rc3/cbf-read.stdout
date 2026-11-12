@@ -1,0 +1,9 @@
+CBF evidence: PASS
+project: cbf
+surface: git
+policy_version: 0.1.1
+policy_sha256: fd4c62dd87648264ccf6d261daab16f29724617f0678ab29453e94dfdba19710
+policy_effective_sha256: ec258743138fe9831eee2a9d48d14803d3ec5b59b68019cc4ff404122ce070a9
+evidence_sha256: 08567f171362f4fa8cb42855f0caab842738975ae2104078912374f1a3fabd7c (verified)
+findings: 0
+scanned: bytes=0, files=0, ignored=0, skipped=0

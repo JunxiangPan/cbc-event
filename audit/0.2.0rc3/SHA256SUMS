@@ -1,0 +1,6 @@
+7f30ed883eab05b7ba012fe02d5a0a4dfbafdef0f35fa380222c86ee33c002a4 *audit/0.2.0rc3/README.md
+b476390e432682f78dfd5840e83a29c01eca17dad2f9bdf88112171d35cb85d7 *audit/0.2.0rc3/cbf-evidence-v1.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *audit/0.2.0rc3/cbf-read.stderr
+85a22ce08f0a5d5b280692fd63008138b099e65a5dc6be8fe6471966abfc2578 *audit/0.2.0rc3/cbf-read.stdout
+9e8ba062527eb06a573b7077cf741d5e65190b5ebfabbce7da86ff6869fa7b23 *audit/0.2.0rc3/cbf-view.json
+deee12b501a8763a74aa8c779a240e70c88113a50dfd234633d6ae997122b6b4 *audit/0.2.0rc3/reader-tests.stdout

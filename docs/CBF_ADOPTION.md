@@ -7,8 +7,9 @@ Status: **PENDING_CBF_0.1.0**
 - planned CI job: `cbf-privacy-gate`
 - evidence format: `cbf-evidence/v1`
 
-CBC has **not** integrated CBF. There is **no CBF PASS**, and CBC does not
-claim CBF compatibility. CBF is an independent project; CBC does not import
+CBC has **not** run the CBF gate. There is **no CBF PASS for CBC**, and CBC does
+not claim CBF compatibility. (Reading a CBF 0.1.0rc1 evidence file proves reader
+interoperability only; it is not a gate run by CBC.) CBF is an independent project; CBC does not import
 it and does not require it to be installed.
 
 ## Phase 0 (current)
